@@ -2,8 +2,6 @@ use std::collections::HashMap;
 
 use pagetop::prelude::*;
 
-use super::config;
-
 /// Supported themes.
 ///
 /// Themes are identified as *PascalCase* enums and as *kebab-case* strings.
@@ -115,7 +113,7 @@ pub enum HljsTheme {
     Zenburn,
 }
 
-static THEMES: LazyStatic<HashMap<HljsTheme, &'static str>> = LazyStatic::new(|| {
+pub(crate) static THEMES: LazyStatic<HashMap<HljsTheme, &'static str>> = LazyStatic::new(|| {
     use HljsTheme::*;
     kv![
         A11yDark                => "a11y-dark",
@@ -225,13 +223,8 @@ impl ToString for HljsTheme {
     }
 }
 
-pub(crate) static THEME: LazyStatic<&HljsTheme> = LazyStatic::new(|| {
-    if let Some((theme, _)) = THEMES
-        .iter()
-        .find(|(_, &value)| value == config::SETTINGS.hljs.theme)
-    {
-        &theme
-    } else {
-        &HljsTheme::Default
+impl HljsTheme {
+    pub fn to_url(theme: &str) -> String {
+        concat_string!("/hljs/css/", theme, ".min.css")
     }
-});
+}

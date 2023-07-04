@@ -207,3 +207,9 @@ impl ToString for HljsLang {
         LANGS.get(self).unwrap().to_string()
     }
 }
+
+impl HljsLang {
+    pub fn to_url(language: &str) -> String {
+        concat_string!("/hljs/js/lang/", language, ".min.js")
+    }
+}

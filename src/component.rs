@@ -8,19 +8,17 @@ use_handle!(COMPONENT_HLJS);
 
 #[rustfmt::skip]
 #[derive(Default)]
-/// Implements
-/// [`ComponentTrait`](https://docs.rs/pagetop/latest/pagetop/core/component/trait.ComponentTrait.html)
-/// and the specific API builder for the component.
-pub struct Hljs {
+/// Component to incorporate code snippets on web pages.
+pub struct Snippet {
     weight    : isize,
     renderable: Renderable,
     language  : HljsLang,
     code      : String,
 }
 
-impl ComponentTrait for Hljs {
+impl ComponentTrait for Snippet {
     fn new() -> Self {
-        Hljs::default()
+        Snippet::default()
     }
 
     fn handle(&self) -> Handle {
@@ -36,7 +34,7 @@ impl ComponentTrait for Hljs {
     }
 
     fn before_prepare_component(&mut self, cx: &mut Context) {
-        HighlightJS.enable(self.language(), cx);
+        HighlightJS.enable_language(self.language(), cx);
     }
 
     fn prepare_component(&self, _context: &mut Context) -> PrepareMarkup {
@@ -58,7 +56,7 @@ impl ComponentTrait for Hljs {
     }
 }
 
-impl Hljs {
+impl Snippet {
     // Hljs BUILDER.
 
     #[fn_builder]
