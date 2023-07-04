@@ -1,15 +1,34 @@
-//! The [PageTop](https://docs.rs/pagetop) module **HighlightJS** displays beautiful code snippets
-//! on web pages using the [highlight.js](https://highlightjs.org/) library:
+//! **HighlightJS** is a [PageTop](https://docs.rs/pagetop) module that displays beautiful code
+//! snippets on web pages using the versatile [highlight.js](https://highlightjs.org/) JavaScript
+//! library.
 //!
-//! * Supports **90+** coding languages.
-//! * Choose from all **95+** available themes.
-//! * Provides a component for adding code snippets.
-//! * Highlight multi-line blocks of code.
-//! * Detects `language-` and `lang-` class prefixes.
-//! * Customize the *highlight.js* init JavaScript.
-//! * Smart loading of CSS & JS assets.
+//! ## Usage:
 //!
-//! Example:
+//! Add to `Cargo.toml` dependency to `pagetop-hljs`:
+//!
+//! ```rust
+//! [dependencies]
+//! pagetop-hljs = "<Version>"
+//! ```
+//!
+//! Add to PageTop module (or application) dependency to **HighlightJS**:
+//!
+//! ```rust
+//! use pagetop::prelude::*;
+//!
+//! impl ModuleTrait for ModuleName {
+//!     // ...
+//!     fn dependencies(&self) -> Vec<ModuleStaticRef> {
+//!         vec![
+//!             // ...
+//!             &pagetop_hljs::HighlightJS
+//!             // ...
+//!         ]
+//!     }
+//!     // ...
+//! }
+//! ```
+//!
 //! ```rust
 //! use pagetop_hljs::HighlightJS;
 //!
@@ -36,14 +55,16 @@ use_locale!(LOCALE_HLJS);
 
 use_static!(hljs);
 
+// Library version.
 const VERSION_HLJS: &str = "11.8.0";
 
+// Context parameters.
+const PARAM_HLJS_LIB: &str = "hljs.lib";
 const PARAM_HLJS_LANGS: &str = "hljs.langs";
 const PARAM_HLJS_THEME: &str = "hljs.theme";
+const PARAM_HLJS_DISABLED: &str = "hljs.disabled";
 
-/// Implements
-/// [`ModuleTrait`](https://docs.rs/pagetop/latest/pagetop/core/module/trait.ModuleTrait.html)
-/// and the specific API for the module.
+/// Implements [`ModuleTrait`](pagetop::core::module::ModuleTrait) and specific module API.
 pub struct HighlightJS;
 
 impl ModuleTrait for HighlightJS {
@@ -69,83 +90,106 @@ impl ModuleTrait for HighlightJS {
 }
 
 impl HighlightJS {
-    /// Enable in context the **Highlight.js** library.
-    pub fn enable(&self, language: &HljsLang, cx: &mut Context) -> &Self {
+    /// Enables a new language for processing code snippets. At least one language must be enabled
+    /// to load the library.
+    pub fn enable_language(&self, language: &HljsLang, cx: &mut Context) -> &Self {
         let languages = match cx.get_param::<String>(PARAM_HLJS_LANGS) {
-            Some(l) => concat_string!(l, ";", language.to_string()),
+            Some(previous) => concat_string!(previous, ";", language.to_string()),
             None => language.to_string(),
         };
         cx.set_param::<String>(PARAM_HLJS_LANGS, languages);
         self
     }
 
-    /// Enable in context the **Highlight.js** theme.
-    pub fn with_theme(&self, theme: HljsTheme, cx: &mut Context) -> &Self {
+    /// Enables a new theme for displaying code snippets. The same theme is used for all snippets.
+    pub fn enable_theme(&self, theme: HljsTheme, cx: &mut Context) -> &Self {
         cx.set_param::<String>(PARAM_HLJS_THEME, theme.to_string());
         self
     }
 
-    /// Disable in context the **Highlight.js** library.
-    pub fn disable(&self, cx: &mut Context) -> &Self {
-        cx.remove_param(PARAM_HLJS_LANGS);
+    /// Disables the library, preventing syntax highlighting from being applied to code snippets.
+    pub fn disable_hljs(&self, cx: &mut Context) -> &Self {
+        cx.set_param::<bool>(PARAM_HLJS_DISABLED, true);
+        self
+    }
+
+    /// Enables the use of the core library, regardless of the `config::SETTINGS.hljs.library`
+    /// configuration setting. This mode utilizes the core of the library and preloads only the
+    /// languages enabled for snippets in the same context.
+    pub fn force_core_lib(&self, cx: &mut Context) -> &Self {
+        cx.set_param::<String>(PARAM_HLJS_LIB, "core".to_owned());
+        self
+    }
+
+    /// Enables the use of the common library, regardless of the `config::SETTINGS.hljs.library`
+    /// configuration setting. This mode uses a version of the library that includes almost 40
+    /// languages in a single larger preload. If a code snippet requires a language that is not in
+    /// the library, syntax highlighting will not be applied.
+    pub fn force_common_lib(&self, cx: &mut Context) -> &Self {
+        cx.set_param::<String>(PARAM_HLJS_LIB, "common".to_owned());
         self
     }
 }
 
 fn before_render_page(page: &mut Page) {
-    if let Some(l) = page.context().get_param::<String>(PARAM_HLJS_LANGS) {
-        // Theme.
-        let theme = page
-            .context()
-            .get_param::<String>(PARAM_HLJS_THEME)
-            .unwrap_or(theme::THEME.to_string());
-        page.context().alter(ContextOp::AddStyleSheet(
-            StyleSheet::located(concat_string!("/hljs/css/", theme, ".min.css"))
-                .with_version(VERSION_HLJS),
-        ));
+    // The PARAM_HLJS_DISABLED parameter is set by disable_hljs(). If true, the library will be
+    // disabled, preventing loading and syntax highlighting.
+    if let Some(true) = page.context().get_param::<bool>(PARAM_HLJS_DISABLED) {
+        return;
+    }
 
-        // Highlight.js core.
+    // The PARAM_HLJS_LANGS parameter stores languages (separated by semicolons) enabled by
+    // enable_language(). If empty, the library will not be loaded.
+    if let Some(languages) = page.context().get_param::<String>(PARAM_HLJS_LANGS) {
+        // The PARAM_HLJS_LIB parameter is modified by force_core_lib() and force_common_lib(). It
+        // takes values "core" or "common" based on the invoked function. If not assigned, the
+        // config::LIB value is used, which defaults to config::SETTINGS.hljs.library or "core".
+        let library = page
+            .context()
+            .get_param::<String>(PARAM_HLJS_LIB)
+            .unwrap_or(config::LIB.to_owned());
         page.context().alter(ContextOp::AddJavaScript(
-            JavaScript::located("/hljs/js/core.min.js")
+            JavaScript::located(concat_string!("/hljs/js/", library, ".min.js"))
                 .with_version(VERSION_HLJS)
                 .with_mode(ModeJS::Normal),
         ));
 
         // Languages.
-        let languages: HashSet<&str> = l.split(';').collect();
-        for lang in languages {
+        let languages: HashSet<&str> = languages.split(';').collect();
+        for l in languages {
             page.context().alter(ContextOp::AddJavaScript(
-                JavaScript::located(concat_string!("/hljs/js/lang/", lang, ".min.js"))
+                JavaScript::located(HljsLang::to_url(l))
                     .with_version(VERSION_HLJS)
                     .with_mode(ModeJS::Normal),
             ));
         }
 
-        // Configure and enable.
+        // Configure (disabling language autodetection).
         page.context().alter(ContextOp::AddCodeScript(
-            CodeScript::located("/hljs/code/highlight.js").with_code(
+            CodeScript::named("/hljs/code/highlight.js").with_code(concat_string!(
                 r#"
                     hljs.configure({
-                        tabReplace: '    ', // 4 spaces
-                        languages: [],      // Languages used for auto-detection
+                        tabReplace: "#,
+                "'",
+                " ".repeat(config::SETTINGS.hljs.tabsize),
+                "',",
+                r#"
+                        languages: [],
                     });
                     hljs.highlightAll();
                 "#
-                .to_owned(),
-            ),
+            )),
+        ));
+
+        // The PARAM_HLJS_THEME parameter stores the theme enabled by enable_theme(). If empty, the
+        // config::THEME value is used, which defaults to config::SETTINGS.hljs.theme or
+        // HljsTheme::Default.
+        let theme = page
+            .context()
+            .get_param::<String>(PARAM_HLJS_THEME)
+            .unwrap_or(config::THEME.to_string());
+        page.context().alter(ContextOp::AddStyleSheet(
+            StyleSheet::located(HljsTheme::to_url(theme.as_str())).with_version(VERSION_HLJS),
         ));
     }
 }
-
-/*
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
-}
-*/
