@@ -57,6 +57,10 @@ impl ComponentTrait for Snippet {
 }
 
 impl Snippet {
+    pub fn with(language: HljsLang, code: String) -> Self {
+        Snippet::new().with_language(language).with_code(code)
+    }
+
     // Hljs BUILDER.
 
     #[fn_builder]

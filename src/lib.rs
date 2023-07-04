@@ -56,7 +56,7 @@ use_locale!(LOCALE_HLJS);
 use_static!(hljs);
 
 // Library version.
-const VERSION_HLJS: &str = "11.8.0";
+const VERSION_HLJS: &str = "11.7.0";
 
 // Context parameters.
 const PARAM_HLJS_LIB: &str = "hljs.lib";
@@ -132,63 +132,71 @@ impl HighlightJS {
 }
 
 fn before_render_page(page: &mut Page) {
+    let context = page.context();
+
     // The PARAM_HLJS_DISABLED parameter is set by disable_hljs(). If true, the library will be
     // disabled, preventing loading and syntax highlighting.
-    if let Some(true) = page.context().get_param::<bool>(PARAM_HLJS_DISABLED) {
+    if let Some(true) = context.get_param::<bool>(PARAM_HLJS_DISABLED) {
         return;
     }
 
     // The PARAM_HLJS_LANGS parameter stores languages (separated by semicolons) enabled by
     // enable_language(). If empty, the library will not be loaded.
-    if let Some(languages) = page.context().get_param::<String>(PARAM_HLJS_LANGS) {
+    if let Some(languages) = context.get_param::<String>(PARAM_HLJS_LANGS) {
         // The PARAM_HLJS_LIB parameter is modified by force_core_lib() and force_common_lib(). It
         // takes values "core" or "common" based on the invoked function. If not assigned, the
         // config::LIB value is used, which defaults to config::SETTINGS.hljs.library or "core".
-        let library = page
-            .context()
+        match context
             .get_param::<String>(PARAM_HLJS_LIB)
-            .unwrap_or(config::LIB.to_owned());
-        page.context().alter(ContextOp::AddJavaScript(
-            JavaScript::located(concat_string!("/hljs/js/", library, ".min.js"))
-                .with_version(VERSION_HLJS)
-                .with_mode(ModeJS::Normal),
-        ));
-
-        // Languages.
-        let languages: HashSet<&str> = languages.split(';').collect();
-        for l in languages {
-            page.context().alter(ContextOp::AddJavaScript(
-                JavaScript::located(HljsLang::to_url(l))
-                    .with_version(VERSION_HLJS)
-                    .with_mode(ModeJS::Normal),
-            ));
+            .unwrap_or(config::LIB.to_owned())
+            .as_str()
+        {
+            "core" => {
+                context.alter(ContextOp::AddJavaScript(
+                    JavaScript::located("/hljs/js/core.min.js")
+                        .with_version(VERSION_HLJS)
+                        .with_mode(ModeJS::Normal),
+                ));
+                let languages: HashSet<&str> = languages.split(';').collect();
+                for l in languages {
+                    context.alter(ContextOp::AddJavaScript(
+                        JavaScript::located(HljsLang::to_url(l))
+                            .with_version(VERSION_HLJS)
+                            .with_mode(ModeJS::Normal),
+                    ));
+                }
+            }
+            _ => {
+                context.alter(ContextOp::AddJavaScript(
+                    JavaScript::located("/hljs/js/highlight.min.js")
+                        .with_version(VERSION_HLJS)
+                        .with_mode(ModeJS::Normal),
+                ));
+            }
         }
 
         // Configure (disabling language autodetection).
-        page.context().alter(ContextOp::AddCodeScript(
+        context.alter(ContextOp::AddCodeScript(
             CodeScript::named("/hljs/code/highlight.js").with_code(concat_string!(
                 r#"
-                    hljs.configure({
-                        tabReplace: "#,
-                "'",
+    hljs.configure({
+        tabReplace: '"#,
                 " ".repeat(config::SETTINGS.hljs.tabsize),
-                "',",
-                r#"
-                        languages: [],
-                    });
-                    hljs.highlightAll();
-                "#
+                r#"',
+        languages: [],
+    });
+    hljs.highlightAll();
+"#
             )),
         ));
 
         // The PARAM_HLJS_THEME parameter stores the theme enabled by enable_theme(). If empty, the
         // config::THEME value is used, which defaults to config::SETTINGS.hljs.theme or
         // HljsTheme::Default.
-        let theme = page
-            .context()
+        let theme = context
             .get_param::<String>(PARAM_HLJS_THEME)
             .unwrap_or(config::THEME.to_string());
-        page.context().alter(ContextOp::AddStyleSheet(
+        context.alter(ContextOp::AddStyleSheet(
             StyleSheet::located(HljsTheme::to_url(theme.as_str())).with_version(VERSION_HLJS),
         ));
     }
