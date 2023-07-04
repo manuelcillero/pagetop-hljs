@@ -210,6 +210,6 @@ impl ToString for HljsLang {
 
 impl HljsLang {
     pub fn to_url(language: &str) -> String {
-        concat_string!("/hljs/js/lang/", language, ".min.js")
+        concat_string!("/hljs/js/languages/", language, ".min.js")
     }
 }
