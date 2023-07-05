@@ -1,5 +1,5 @@
-**PageTop** module that displays beautiful code snippets on web pages using the versatile
-[highlight.js](https://highlightjs.org/) JavaScript library.
+**HighlightJS** (`pagetop-hljs`) is a PageTop module that displays beautiful code snippets on web
+pages using the versatile [highlight.js](https://highlightjs.org/) JavaScript library.
 
   * Supports **90+** coding languages.
   * Choose from all **95+** available themes.
@@ -9,10 +9,12 @@
   * Customize the *highlight.js* init JavaScript.
   * Smart loading of CSS & JS assets.
 
+
+# 📦 About PageTop
+
 [PageTop](https://github.com/manuelcillero/pagetop/tree/main/pagetop) is an opinionated web
-development framework based on some of the most stable and popular *crates* from the Rust ecosystem,
-providing APIs, development patterns, and best practices for building Server-Side Rendering (SSR)
-web solutions.
+development framework that uses some of the most stable and popular Rust packages to build modular,
+extensible and configurable Server-Side Rendering (SSR) solutions.
 
 
 # 🚧 Warning

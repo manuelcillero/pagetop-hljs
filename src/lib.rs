@@ -1,6 +1,6 @@
-//! **HighlightJS** is a [PageTop](https://docs.rs/pagetop) module that displays beautiful code
-//! snippets on web pages using the versatile [highlight.js](https://highlightjs.org/) JavaScript
-//! library.
+//! **HighlightJS** (`pagetop-hljs`) is a [PageTop](https://docs.rs/pagetop) module that displays
+//! beautiful code snippets on web pages using the versatile [highlight.js](https://highlightjs.org)
+//! JavaScript library.
 //!
 //! ## Usage
 //!
@@ -209,7 +209,7 @@ fn before_render_page(page: &mut Page) {
 
         // Configure (disabling language autodetection).
         context.alter(ContextOp::AddCodeScript(
-            CodeScript::named("/hljs/code/highlight.js").with_code(concat_string!(
+            CodeScript::named("highlight.js").with_code(concat_string!(
                 r#"
     hljs.configure({
         tabReplace: '"#,
