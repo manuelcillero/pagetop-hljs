@@ -2,7 +2,7 @@
 //! snippets on web pages using the versatile [highlight.js](https://highlightjs.org/) JavaScript
 //! library.
 //!
-//! ## Usage:
+//! ## Usage
 //!
 //! Add to `Cargo.toml` dependency to `pagetop-hljs`:
 //!
@@ -11,7 +11,7 @@
 //! pagetop-hljs = "<Version>"
 //! ```
 //!
-//! Add to PageTop module (or application) dependency to **HighlightJS**:
+//! Add the dependency to `pagetop_hljs::HighlightJS` in the module that uses it:
 //!
 //! ```rust
 //! use pagetop::prelude::*;
@@ -29,12 +29,36 @@
 //! }
 //! ```
 //!
-//! ```rust
-//! use pagetop_hljs::HighlightJS;
+//! Now you can add code snippets on web pages:
 //!
-//! // Enable Highlight.js in context using the highlight.js default theme:
-//! HighLightJS.enable(cx).with_theme("default", cx);
+//! ```rust
+//! use pagetop_hljs::prelude::*;
+//!
+//! #[service::get("/")]
+//! async fn hljs_sample(request: service::HttpRequest) -> ResultPage<Markup, FatalError> {
+//!     Page::new(request)
+//!         .with_in(
+//!             "content",
+//!             Snippet::with(
+//!                 HljsLang::Rust,
+//!                 r##"
+//! async fn hello_world(request: service::HttpRequest) -> ResultPage<Markup, FatalError> {
+//!     Page::new(request)
+//!         .with_in("content", Html::with(html! { h1 { "Hello World!" } }))
+//!         .render()
+//! }
+//!                 "##,
+//!             ),
+//!         )
+//!         .render()
+//! }
 //! ```
+//!
+//! ## Note
+//!
+//! **HighlightJS** uses [`ActionBeforeRenderPage`](pagetop::response::page::ActionBeforeRenderPage)
+//! with weight 99 to prepare page assets. If you use it to alter **HighlightJS** rendering, e.g.,
+//! specifying the snippets theme, your action should have a weight below 99. Default 0 is ok.
 
 use pagetop::prelude::*;
 
@@ -48,6 +72,14 @@ pub use lang::HljsLang;
 
 mod theme;
 pub use theme::HljsTheme;
+
+/// The HighlighJS Prelude.
+pub mod prelude {
+    pub use crate::component::{Snippet, COMPONENT_SNIPPET};
+    pub use crate::HighlightJS;
+    pub use crate::HljsLang;
+    pub use crate::HljsTheme;
+}
 
 use_handle!(MODULE_HLJS);
 
@@ -81,7 +113,7 @@ impl ModuleTrait for HighlightJS {
     }
 
     fn actions(&self) -> Vec<Action> {
-        vec![action!(actions::page::ActionBeforeRenderPage => before_render_page)]
+        vec![action!(actions::page::ActionBeforeRenderPage => before_render_page, 99)]
     }
 
     fn configure_service(&self, cfg: &mut service::web::ServiceConfig) {

@@ -4,7 +4,7 @@ use pagetop::prelude::*;
 
 use super::{HighlightJS, HljsLang};
 
-use_handle!(COMPONENT_HLJS);
+use_handle!(COMPONENT_SNIPPET);
 
 #[rustfmt::skip]
 #[derive(Default)]
@@ -22,7 +22,7 @@ impl ComponentTrait for Snippet {
     }
 
     fn handle(&self) -> Handle {
-        COMPONENT_HLJS
+        COMPONENT_SNIPPET
     }
 
     fn weight(&self) -> isize {
@@ -57,7 +57,7 @@ impl ComponentTrait for Snippet {
 }
 
 impl Snippet {
-    pub fn with(language: HljsLang, code: String) -> Self {
+    pub fn with(language: HljsLang, code: &str) -> Self {
         Snippet::new().with_language(language).with_code(code)
     }
 
@@ -82,8 +82,8 @@ impl Snippet {
     }
 
     #[fn_builder]
-    pub fn alter_code(&mut self, code: String) -> &mut Self {
-        self.code = code;
+    pub fn alter_code(&mut self, code: &str) -> &mut Self {
+        self.code = code.trim().to_owned();
         self
     }
 

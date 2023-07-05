@@ -1,4 +1,4 @@
-//! Configuration settings for **HighlightJS** module.
+//! Configuration settings for HighlightJS module.
 //!
 //! Example:
 //!
@@ -34,11 +34,11 @@ pub struct Settings {
 #[derive(Debug, Deserialize)]
 /// [`Settings`] section `[hljs]`.
 pub struct Hljs {
-    /// You can utilize the ***core*** library to import the language specific to each code snippet
-    /// enabled in the given context (see [`enable_language()`](crate::HighlightJS::enable_language())).
-    /// Furthermore, the ***common*** library provides support for approximately 40 popular
-    /// languages. However, if you exclusively rely on the common library, you will only have access
-    /// to these preloaded languages.
+    /// You can utilize the ***core*** library to import the enabled language to each code snippet
+    /// (see [`enable_language()`](crate::HighlightJS::enable_language())). Furthermore, the
+    /// ***common*** library provides support for approximately 40 popular languages. However, if
+    /// you exclusively rely on the common library, you will only have access to these preloaded
+    /// languages.
     /// Default value: *"core"*
     pub library: String,
     /// Default theme to display code snippets on web pages, written in *kebab-case* (see

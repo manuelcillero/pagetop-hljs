@@ -1,0 +1,10 @@
+[package]
+name = "hljs_sample"
+version = "0.0.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+actix-web = "4"
+pagetop = { version = "0.0", path = "../../PageTop/pagetop" }
+pagetop-hljs = { version = "0.0", path = ".." }
