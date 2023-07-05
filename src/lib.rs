@@ -56,10 +56,10 @@
 //!
 //! ## Note
 //!
-//! **HighlightJS** uses [`ActionBeforeRenderPage`](pagetop::response::page::ActionBeforeRenderPage)
-//! with a weight of 99 to render page resources. If you use this action to modify **HighlightJS**
-//! rendering, such as specifying the theme for code snippets, please ensure that your action has a
-//! weight lower than 99. The default weight of 0 is acceptable.
+//! HighlightJS uses [`ActionBeforeRenderPage`](pagetop::response::page::ActionBeforeRenderPage)
+//! with a weight of 99 to add page assets. If you use this action to alter HighlightJS rendering,
+//! such as specifying the theme for snippets, please ensure that your action has a weight lower
+//! than 99. Default 0 is ok.
 
 use pagetop::prelude::*;
 
