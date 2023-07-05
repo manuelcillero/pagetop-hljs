@@ -57,8 +57,9 @@
 //! ## Note
 //!
 //! **HighlightJS** uses [`ActionBeforeRenderPage`](pagetop::response::page::ActionBeforeRenderPage)
-//! with weight 99 to prepare page assets. If you use it to alter **HighlightJS** rendering, e.g.,
-//! specifying the snippets theme, your action should have a weight below 99. Default 0 is ok.
+//! with a weight of 99 to prepare page assets. If you use it to alter **HighlightJS** rendering,
+//! e.g., by specifying the snippets theme, your action should have a weight less than 99. The
+//! default weight 0 is fine.
 
 use pagetop::prelude::*;
 

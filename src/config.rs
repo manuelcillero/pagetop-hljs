@@ -50,14 +50,14 @@ pub struct Hljs {
     pub tabsize: usize,
 }
 
-use_config!(SETTINGS as Settings,
+default_settings!(
     // [hljs]
     "hljs.library" => "core",
     "hljs.theme"   => "default",
     "hljs.tabsize" => 4,
 );
 
-// Defaults to SETTINGS.hljs.library or "core".
+// Defaults to valid SETTINGS.hljs.library or "core".
 pub(crate) static LIB: LazyStatic<&str> =
     LazyStatic::new(|| match SETTINGS.hljs.library.to_lowercase().as_str() {
         "core" => "core",
@@ -71,13 +71,11 @@ pub(crate) static LIB: LazyStatic<&str> =
         }
     });
 
-// Defaults to SETTINGS.hljs.theme or HljsTheme::Default.
+// Defaults to valid SETTINGS.hljs.theme or HljsTheme::Default.
 pub(crate) static THEME: LazyStatic<&HljsTheme> = LazyStatic::new(|| {
-    if let Some((theme, _)) = THEMES
-        .iter()
-        .find(|(_, &value)| value == SETTINGS.hljs.theme)
-    {
-        &theme
+    let theme = SETTINGS.hljs.theme.to_lowercase();
+    if let Some((t, _)) = THEMES.iter().find(|(_, &v)| v == theme) {
+        &t
     } else {
         trace::warn!(
             "Unrecognized theme '{}' for HighlightJS, 'default' is assumed",
