@@ -18,8 +18,6 @@ impl ModuleTrait for HljsSample {
         vec![action!(actions::page::ActionBeforeRenderPage => before_render_page)]
     }
 
-    fn init(&self) {}
-
     fn configure_service(&self, cfg: &mut service::web::ServiceConfig) {
         cfg.service(hljs_sample);
     }

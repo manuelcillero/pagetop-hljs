@@ -208,9 +208,9 @@ fn before_render_page(page: &mut Page) {
             }
         }
 
-        // Configure (disabling language autodetection).
-        context.alter(ContextOp::AddCodeScript(
-            CodeScript::named("highlight.js").with_code(concat_string!(
+        // Configure highlight.js (disabling language autodetection).
+        context.alter(ContextOp::AddHeadScript(
+            HeadScript::named("highlight.js").with_code(concat_string!(
                 r#"
     hljs.configure({
         tabReplace: '"#,
@@ -220,7 +220,7 @@ fn before_render_page(page: &mut Page) {
     });
     hljs.highlightAll();
 "#
-            )),
+            ).as_str()),
         ));
 
         // The PARAM_HLJS_THEME parameter stores the theme enabled by enable_theme(). If empty, the
