@@ -36,7 +36,7 @@ impl ModuleTrait for ModuleName {
 }
 ```
 
-Now you can add code snippets on web pages:
+Now your module can add code snippets on web pages:
 
 ```rust
 use pagetop_hljs::prelude::*;
