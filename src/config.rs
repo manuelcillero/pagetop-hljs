@@ -75,7 +75,7 @@ pub(crate) static LIB: LazyStatic<&str> =
 pub(crate) static THEME: LazyStatic<&HljsTheme> = LazyStatic::new(|| {
     let theme = SETTINGS.hljs.theme.to_lowercase();
     if let Some((t, _)) = THEMES.iter().find(|(_, &v)| v == theme) {
-        &t
+        t
     } else {
         trace::warn!(
             "Unrecognized theme '{}' for HighlightJS, 'default' is assumed",

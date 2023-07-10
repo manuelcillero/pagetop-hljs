@@ -114,7 +114,7 @@ impl ModuleTrait for HighlightJS {
     }
 
     fn actions(&self) -> Vec<Action> {
-        vec![action!(actions::page::ActionBeforeRenderPage => before_render_page, 99)]
+        vec![action!(ActionBeforeRenderPage => before_render_page, 99)]
     }
 
     fn configure_service(&self, cfg: &mut service::web::ServiceConfig) {
@@ -210,17 +210,20 @@ fn before_render_page(page: &mut Page) {
 
         // Configure highlight.js (disabling language autodetection).
         context.alter(ContextOp::AddHeadScript(
-            HeadScript::named("highlight.js").with_code(concat_string!(
-                r#"
+            HeadScript::named("highlight.js").with_code(
+                concat_string!(
+                    r#"
     hljs.configure({
         tabReplace: '"#,
-                " ".repeat(config::SETTINGS.hljs.tabsize),
-                r#"',
+                    " ".repeat(config::SETTINGS.hljs.tabsize),
+                    r#"',
         languages: [],
     });
     hljs.highlightAll();
 "#
-            ).as_str()),
+                )
+                .as_str(),
+            ),
         ));
 
         // The PARAM_HLJS_THEME parameter stores the theme enabled by enable_theme(). If empty, the
