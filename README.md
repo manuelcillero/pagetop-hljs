@@ -71,9 +71,9 @@ Default 0 is ok.
 
 # 📦 About PageTop
 
-[PageTop](https://github.com/manuelcillero/pagetop/tree/main/pagetop) is an opinionated web
-development framework that uses some of the most stable and popular Rust packages to build modular,
-extensible and configurable Server-Side Rendering (SSR) solutions.
+[PageTop](https://github.com/manuelcillero/pagetop/tree/main/pagetop) is an opinionated Rust web
+development framework to build secure, modular, and fast web Server-Side Rendering (SSR) solutions
+with ease.
 
 
 # 🚧 Warning
