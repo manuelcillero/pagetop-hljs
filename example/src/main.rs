@@ -15,7 +15,7 @@ impl ModuleTrait for HljsSample {
     }
 
     fn actions(&self) -> Vec<Action> {
-        vec![action!(actions::page::ActionBeforeRenderPage => before_render_page)]
+        vec![action!(ActionAfterPrepareBody => after_prepare_body)]
     }
 
     fn configure_service(&self, cfg: &mut service::web::ServiceConfig) {
@@ -63,7 +63,7 @@ async fn main() -> std::io::Result<()> {
         .render()
 }
 
-fn before_render_page(page: &mut Page) {
+fn after_prepare_body(page: &mut Page) {
     HighlightJS.enable_theme(HljsTheme::Sunburst, page.context());
 }
 

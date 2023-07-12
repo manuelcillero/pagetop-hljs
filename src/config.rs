@@ -21,7 +21,7 @@
 
 use pagetop::prelude::*;
 
-use super::theme::THEMES;
+use super::theme::HLJS_THEMES;
 use super::HljsTheme;
 
 use serde::Deserialize;
@@ -58,7 +58,7 @@ default_settings!(
 );
 
 // Defaults to valid SETTINGS.hljs.library or "core".
-pub(crate) static LIB: LazyStatic<&str> =
+pub(crate) static HLJS_LIB: LazyStatic<&str> =
     LazyStatic::new(|| match SETTINGS.hljs.library.to_lowercase().as_str() {
         "core" => "core",
         "common" => "common",
@@ -72,9 +72,9 @@ pub(crate) static LIB: LazyStatic<&str> =
     });
 
 // Defaults to valid SETTINGS.hljs.theme or HljsTheme::Default.
-pub(crate) static THEME: LazyStatic<&HljsTheme> = LazyStatic::new(|| {
+pub(crate) static HLJS_THEME: LazyStatic<&HljsTheme> = LazyStatic::new(|| {
     let theme = SETTINGS.hljs.theme.to_lowercase();
-    if let Some((t, _)) = THEMES.iter().find(|(_, &v)| v == theme) {
+    if let Some((t, _)) = HLJS_THEMES.iter().find(|(_, &v)| v == theme) {
         t
     } else {
         trace::warn!(

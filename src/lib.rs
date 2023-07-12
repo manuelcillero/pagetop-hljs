@@ -114,7 +114,7 @@ impl ModuleTrait for HighlightJS {
     }
 
     fn actions(&self) -> Vec<Action> {
-        vec![action!(ActionBeforeRenderPage => before_render_page, 99)]
+        vec![action!(ActionAfterPrepareBody => after_prepare_body, 99)]
     }
 
     fn configure_service(&self, cfg: &mut service::web::ServiceConfig) {
@@ -164,7 +164,7 @@ impl HighlightJS {
     }
 }
 
-fn before_render_page(page: &mut Page) {
+fn after_prepare_body(page: &mut Page) {
     let context = page.context();
 
     // The PARAM_HLJS_DISABLED parameter is set by disable_hljs(). If true, the library will be
@@ -181,19 +181,19 @@ fn before_render_page(page: &mut Page) {
         // config::LIB value is used, which defaults to config::SETTINGS.hljs.library or "core".
         match context
             .get_param::<String>(PARAM_HLJS_LIB)
-            .unwrap_or(config::LIB.to_owned())
+            .unwrap_or(config::HLJS_LIB.to_owned())
             .as_str()
         {
             "core" => {
                 context.alter(ContextOp::AddJavaScript(
-                    JavaScript::located("/hljs/js/core.min.js")
+                    JavaScript::at("/hljs/js/core.min.js")
                         .with_version(VERSION_HLJS)
                         .with_mode(ModeJS::Normal),
                 ));
                 let languages: HashSet<&str> = languages.split(';').collect();
                 for l in languages {
                     context.alter(ContextOp::AddJavaScript(
-                        JavaScript::located(HljsLang::to_url(l))
+                        JavaScript::at(HljsLang::to_url(l))
                             .with_version(VERSION_HLJS)
                             .with_mode(ModeJS::Normal),
                     ));
@@ -201,7 +201,7 @@ fn before_render_page(page: &mut Page) {
             }
             _ => {
                 context.alter(ContextOp::AddJavaScript(
-                    JavaScript::located("/hljs/js/highlight.min.js")
+                    JavaScript::at("/hljs/js/highlight.min.js")
                         .with_version(VERSION_HLJS)
                         .with_mode(ModeJS::Normal),
                 ));
@@ -231,9 +231,9 @@ fn before_render_page(page: &mut Page) {
         // HljsTheme::Default.
         let theme = context
             .get_param::<String>(PARAM_HLJS_THEME)
-            .unwrap_or(config::THEME.to_string());
+            .unwrap_or(config::HLJS_THEME.to_string());
         context.alter(ContextOp::AddStyleSheet(
-            StyleSheet::located(HljsTheme::to_url(theme.as_str())).with_version(VERSION_HLJS),
+            StyleSheet::at(HljsTheme::to_url(theme.as_str())).with_version(VERSION_HLJS),
         ));
     }
 }

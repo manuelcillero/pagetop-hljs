@@ -113,7 +113,7 @@ pub enum HljsTheme {
     Zenburn,
 }
 
-pub(crate) static THEMES: LazyStatic<HashMap<HljsTheme, &'static str>> = LazyStatic::new(|| {
+pub(crate) static HLJS_THEMES: LazyStatic<HashMap<HljsTheme, &'static str>> = LazyStatic::new(|| {
     use HljsTheme::*;
     kv![
         A11yDark                => "a11y-dark",
@@ -219,7 +219,7 @@ pub(crate) static THEMES: LazyStatic<HashMap<HljsTheme, &'static str>> = LazySta
 
 impl ToString for HljsTheme {
     fn to_string(&self) -> String {
-        THEMES.get(self).unwrap().to_string()
+        HLJS_THEMES.get(self).unwrap().to_string()
     }
 }
 
