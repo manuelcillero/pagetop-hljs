@@ -4,14 +4,14 @@
 //!
 //! ## Usage
 //!
-//! Add to `Cargo.toml` dependency to `pagetop-hljs`:
+//! Add the dependency pagetop_hljs to `Cargo.toml`:
 //!
 //! ```rust
 //! [dependencies]
 //! pagetop-hljs = "<Version>"
 //! ```
 //!
-//! Add the dependency to `pagetop_hljs::HighlightJS` in the module that uses it:
+//! Add the dependency pagetop_hljs::HighlightJS to the module that uses it:
 //!
 //! ```rust
 //! use pagetop::prelude::*;
@@ -41,13 +41,13 @@
 //!             "content",
 //!             Snippet::with(
 //!                 HljsLang::Rust,
-//!                 r##"
-//! async fn hello_world(request: service::HttpRequest) -> ResultPage<Markup, FatalError> {
-//!     Page::new(request)
-//!         .with_in("content", Html::with(html! { h1 { "Hello World!" } }))
-//!         .render()
+//!                 r###"
+//! // This is the main function.
+//! fn main() {
+//!     // Print text to the console.
+//!     println!("Hello World!");
 //! }
-//!                 "##,
+//!                 "###,
 //!             ),
 //!         )
 //!         .render()
@@ -56,10 +56,13 @@
 //!
 //! ## Note
 //!
-//! HighlightJS uses [`ActionBeforeRenderPage`](pagetop::response::page::ActionBeforeRenderPage)
+//! HighlightJS uses [`ActionAfterPrepareBody`](pagetop::response::page::ActionAfterPrepareBody)
 //! with a weight of 99 to add page assets. If you use this action to alter HighlightJS rendering,
 //! such as specifying the theme for snippets, please ensure that your action has a weight lower
 //! than 99. Default 0 is ok.
+
+#![doc(html_favicon_url = "https://pagetop.cillero.es/theme/favicon.ico")]
+#![doc(html_logo_url = "https://raw.githubusercontent.com/manuelcillero/pagetop-hljs/main/static/pagetop_hljs.png")]
 
 use pagetop::prelude::*;
 
@@ -212,15 +215,15 @@ fn after_prepare_body(page: &mut Page) {
         context.alter(ContextOp::AddHeadScript(
             HeadScript::named("highlight.js").with_code(
                 concat_string!(
-                    r#"
+                    r###"
     hljs.configure({
-        tabReplace: '"#,
+        tabReplace: '"###,
                     " ".repeat(config::SETTINGS.hljs.tabsize),
-                    r#"',
+                    r###"',
         languages: [],
     });
     hljs.highlightAll();
-"#
+"###
                 )
                 .as_str(),
             ),

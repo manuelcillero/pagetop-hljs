@@ -48,13 +48,13 @@ async fn hljs_sample(request: service::HttpRequest) -> ResultPage<Markup, FatalE
             "content",
             Snippet::with(
                 HljsLang::Rust,
-                r##"
+                r###"
 async fn hello_world(request: service::HttpRequest) -> ResultPage<Markup, FatalError> {
     Page::new(request)
         .with_in("content", Html::with(html! { h1 { "Hello World!" } }))
         .render()
 }
-                "##,
+                "###,
             ),
         )
         .render()

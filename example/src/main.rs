@@ -30,7 +30,7 @@ async fn hljs_sample(request: service::HttpRequest) -> ResultPage<Markup, FatalE
             "content",
             Snippet::with(
                 HljsLang::Rust,
-                r##"
+                r###"
 use pagetop::prelude::*;
 
 use_handle!(APP_HELLO_WORLD);
@@ -57,7 +57,7 @@ async fn hello_world(request: service::HttpRequest) -> ResultPage<Markup, FatalE
 async fn main() -> std::io::Result<()> {
     Application::prepare(&HelloWorld).unwrap().run()?.await
 }
-                "##,
+                "###,
             ),
         )
         .render()
