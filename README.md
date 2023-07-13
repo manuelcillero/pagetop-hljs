@@ -11,19 +11,19 @@ pages using the versatile [highlight.js](https://highlightjs.org/) JavaScript li
 
 ## Usage
 
-Add to `Cargo.toml` dependency to `pagetop-hljs`:
+Add the dependency `pagetop_hljs` to `Cargo.toml`:
 
 ```rust
 [dependencies]
 pagetop-hljs = "<Version>"
 ```
 
-Add the dependency to `pagetop_hljs::HighlightJS` in the module that uses it:
+Add the dependency `pagetop_hljs::HighlightJS` to the module that uses it:
 
 ```rust
 use pagetop::prelude::*;
 
-impl ModuleTrait for ModuleName {
+impl ModuleTrait for MyModule {
     // ...
     fn dependencies(&self) -> Vec<ModuleStaticRef> {
         vec![
@@ -32,11 +32,15 @@ impl ModuleTrait for ModuleName {
             // ...
         ]
     }
+
+    fn configure_service(&self, cfg: &mut service::web::ServiceConfig) {
+        cfg.service(hljs_sample);
+    }
     // ...
 }
 ```
 
-Now your module can add code snippets on web pages:
+Now you can add code snippets on web pages:
 
 ```rust
 use pagetop_hljs::prelude::*;
@@ -49,10 +53,10 @@ async fn hljs_sample(request: service::HttpRequest) -> ResultPage<Markup, FatalE
             Snippet::with(
                 HljsLang::Rust,
                 r###"
-async fn hello_world(request: service::HttpRequest) -> ResultPage<Markup, FatalError> {
-    Page::new(request)
-        .with_in("content", Html::with(html! { h1 { "Hello World!" } }))
-        .render()
+// This is the main function.
+fn main() {
+    // Print text to the console.
+    println!("Hello World!");
 }
                 "###,
             ),
@@ -63,7 +67,7 @@ async fn hello_world(request: service::HttpRequest) -> ResultPage<Markup, FatalE
 
 ## Note
 
-HighlightJS uses [`ActionBeforeRenderPage`](pagetop::response::page::ActionBeforeRenderPage) with a
+HighlightJS uses [`ActionAfterPrepareBody`](pagetop::response::page::ActionAfterPrepareBody) with a
 weight of 99 to add page assets. If you use this action to alter HighlightJS rendering, such as
 specifying the theme for snippets, please ensure that your action has a weight lower than 99.
 Default 0 is ok.

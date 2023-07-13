@@ -4,19 +4,19 @@
 //!
 //! ## Usage
 //!
-//! Add the dependency pagetop_hljs to `Cargo.toml`:
+//! Add the dependency `pagetop_hljs` to `Cargo.toml`:
 //!
 //! ```rust
 //! [dependencies]
 //! pagetop-hljs = "<Version>"
 //! ```
 //!
-//! Add the dependency pagetop_hljs::HighlightJS to the module that uses it:
+//! Add the dependency `pagetop_hljs::HighlightJS` to the module that uses it:
 //!
 //! ```rust
 //! use pagetop::prelude::*;
 //!
-//! impl ModuleTrait for ModuleName {
+//! impl ModuleTrait for MyModule {
 //!     // ...
 //!     fn dependencies(&self) -> Vec<ModuleStaticRef> {
 //!         vec![
@@ -24,6 +24,10 @@
 //!             &pagetop_hljs::HighlightJS
 //!             // ...
 //!         ]
+//!     }
+//!
+//!     fn configure_service(&self, cfg: &mut service::web::ServiceConfig) {
+//!         cfg.service(hljs_sample);
 //!     }
 //!     // ...
 //! }
