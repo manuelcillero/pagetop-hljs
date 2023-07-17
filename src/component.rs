@@ -1,16 +1,16 @@
-//! Add a new component to incorporate code snippets on web pages.
+//! Add a new component to put code snippets on web pages.
 
 use pagetop::prelude::*;
 
 use super::{HighlightJS, HljsLang};
 
-use_handle!(COMPONENT_SNIPPET);
+create_handle!(COMPONENT_SNIPPET);
 
 #[rustfmt::skip]
 #[derive(Default)]
-/// Component to incorporate code snippets on web pages.
+/// Component to put code snippets on web pages.
 pub struct Snippet {
-    weight    : isize,
+    weight    : Weight,
     renderable: Renderable,
     language  : HljsLang,
     code      : String,
@@ -25,7 +25,7 @@ impl ComponentTrait for Snippet {
         COMPONENT_SNIPPET
     }
 
-    fn weight(&self) -> isize {
+    fn weight(&self) -> Weight {
         self.weight
     }
 
@@ -34,7 +34,7 @@ impl ComponentTrait for Snippet {
     }
 
     fn before_prepare_component(&mut self, cx: &mut Context) {
-        HighlightJS.enable_language(self.language(), cx);
+        HighlightJS.add_language(self.language(), cx);
     }
 
     fn prepare_component(&self, _context: &mut Context) -> PrepareMarkup {
@@ -49,15 +49,15 @@ impl ComponentTrait for Snippet {
 }
 
 impl Snippet {
-    pub fn with(language: HljsLang, code: &str) -> Self {
+    pub fn with(language: HljsLang, code: impl Into<String>) -> Self {
         Snippet::new().with_language(language).with_code(code)
     }
 
     // Hljs BUILDER.
 
     #[fn_builder]
-    pub fn alter_weight(&mut self, weight: isize) -> &mut Self {
-        self.weight = weight;
+    pub fn alter_weight(&mut self, value: Weight) -> &mut Self {
+        self.weight = value;
         self
     }
 
@@ -74,8 +74,8 @@ impl Snippet {
     }
 
     #[fn_builder]
-    pub fn alter_code(&mut self, code: &str) -> &mut Self {
-        self.code = code.trim().to_owned();
+    pub fn alter_code(&mut self, code: impl Into<String>) -> &mut Self {
+        self.code = code.into().trim().to_owned();
         self
     }
 

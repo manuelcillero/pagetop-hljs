@@ -27,18 +27,17 @@ use super::HljsTheme;
 use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
-/// Configuration settings for the [`[hljs]`](Hljs) section (see [`SETTINGS`]).
+/// Type for HighlightJS configuration settings, section [`[hljs]`](Hljs) (used by [`SETTINGS`]).
 pub struct Settings {
     pub hljs: Hljs,
 }
 #[derive(Debug, Deserialize)]
-/// [`Settings`] section `[hljs]`.
+/// Struct for section `[hljs]` of [`Settings`] type.
 pub struct Hljs {
-    /// You can utilize the ***core*** library to import the enabled language to each code snippet
-    /// (see [`enable_language()`](crate::HighlightJS::enable_language())). Furthermore, the
-    /// ***common*** library provides support for approximately 40 popular languages. However, if
-    /// you exclusively rely on the common library, you will only have access to these preloaded
-    /// languages.
+    /// You can use the ***core*** library to import only the languages added by each snippet (see
+    /// [`add_language()`](crate::HighlightJS::add_language())), or use the ***common*** library
+    /// which supports around 40 popular languages. However, using the common library will restrict
+    /// its usage to only these preloaded languages.
     /// Default value: *"core"*
     pub library: String,
     /// Default theme to display code snippets on web pages, written in *kebab-case* (see

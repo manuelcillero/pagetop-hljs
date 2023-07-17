@@ -1,5 +1,20 @@
+<div align="center">
+
+  <h1>PageTop HighlightJS</h1>
+
+  [![crates.io](https://img.shields.io/crates/v/pagetop-hljs.svg)](https://crates.io/crates/pagetop-hljs)
+  [![docs.rs](https://docs.rs/pagetop-hljs/badge.svg)](https://docs.rs/pagetop-hljs)
+  [![Dependencies](https://deps.rs/crate/pagetop-hljs/0.0.2/status.svg)](https://deps.rs/crate/pagetop-hljs/0.0.2)
+  [![MIT or Apache 2.0 licensed](https://img.shields.io/crates/l/pagetop-hljs.svg)](#license)
+
+</div>
+
+---
+
 **HighlightJS** (`pagetop-hljs`) is a PageTop module that displays beautiful code snippets on web
 pages using the versatile [highlight.js](https://highlightjs.org/) JavaScript library.
+
+## Features
 
   * Supports **90+** coding languages.
   * Choose from all **95+** available themes.
@@ -11,14 +26,14 @@ pages using the versatile [highlight.js](https://highlightjs.org/) JavaScript li
 
 ## Usage
 
-Add the dependency `pagetop_hljs` to `Cargo.toml`:
+Add the following to your `Cargo.toml`:
 
 ```rust
 [dependencies]
 pagetop-hljs = "<Version>"
 ```
 
-Add the dependency `pagetop_hljs::HighlightJS` to the module that uses it:
+Add the dependency `pagetop_hljs::HighlightJS` to your module:
 
 ```rust
 use pagetop::prelude::*;
@@ -40,7 +55,7 @@ impl ModuleTrait for MyModule {
 }
 ```
 
-Now you can add code snippets on web pages:
+Now you can put code snippets on web pages:
 
 ```rust
 use pagetop_hljs::prelude::*;
@@ -68,9 +83,8 @@ fn main() {
 ## Note
 
 HighlightJS uses [`ActionAfterPrepareBody`](pagetop::response::page::ActionAfterPrepareBody) with a
-weight of 99 to add page assets. If you use this action to alter HighlightJS rendering, such as
-specifying the theme for snippets, please ensure that your action has a weight lower than 99.
-Default 0 is ok.
+weight of 99 to add page assets. If you hook this action to alter HighlightJS rendering, such as
+setting the theme for snippets, ensure that your action has a weight lower than 99. Default 0 is ok.
 
 
 # 📦 About PageTop

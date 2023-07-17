@@ -1,7 +1,7 @@
 use pagetop::prelude::*;
 use pagetop_hljs::prelude::*;
 
-use_handle!(APP_HLJS_SAMPLE);
+create_handle!(APP_HLJS_SAMPLE);
 
 struct HljsSample;
 
@@ -33,7 +33,7 @@ async fn hljs_sample(request: service::HttpRequest) -> ResultPage<Markup, FatalE
                 r###"
 use pagetop::prelude::*;
 
-use_handle!(APP_HELLO_WORLD);
+create_handle!(APP_HELLO_WORLD);
 
 struct HelloWorld;
 
@@ -64,7 +64,7 @@ async fn main() -> std::io::Result<()> {
 }
 
 fn after_prepare_body(page: &mut Page) {
-    HighlightJS.enable_theme(HljsTheme::Sunburst, page.context());
+    HighlightJS.set_theme(HljsTheme::Sunburst, page.context());
 }
 
 #[actix_web::main]
