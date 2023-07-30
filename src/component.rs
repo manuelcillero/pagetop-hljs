@@ -4,7 +4,7 @@ use pagetop::prelude::*;
 
 use super::{HighlightJS, HljsLang};
 
-create_handle!(COMPONENT_SNIPPET);
+new_handle!(COMPONENT_SNIPPET);
 
 #[rustfmt::skip]
 #[derive(Default)]

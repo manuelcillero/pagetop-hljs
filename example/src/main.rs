@@ -1,7 +1,7 @@
 use pagetop::prelude::*;
 use pagetop_hljs::prelude::*;
 
-create_handle!(APP_HLJS_SAMPLE);
+new_handle!(APP_HLJS_SAMPLE);
 
 struct HljsSample;
 
@@ -10,7 +10,7 @@ impl ModuleTrait for HljsSample {
         APP_HLJS_SAMPLE
     }
 
-    fn dependencies(&self) -> Vec<ModuleStaticRef> {
+    fn dependencies(&self) -> Vec<ModuleRef> {
         vec![&pagetop_hljs::HighlightJS]
     }
 
@@ -19,11 +19,10 @@ impl ModuleTrait for HljsSample {
     }
 
     fn configure_service(&self, cfg: &mut service::web::ServiceConfig) {
-        cfg.service(hljs_sample);
+        cfg.route("/", service::web::get().to(hljs_sample));
     }
 }
 
-#[service::get("/")]
 async fn hljs_sample(request: service::HttpRequest) -> ResultPage<Markup, FatalError> {
     Page::new(request)
         .with_in(
@@ -33,7 +32,7 @@ async fn hljs_sample(request: service::HttpRequest) -> ResultPage<Markup, FatalE
                 r###"
 use pagetop::prelude::*;
 
-create_handle!(APP_HELLO_WORLD);
+new_handle!(APP_HELLO_WORLD);
 
 struct HelloWorld;
 
@@ -53,7 +52,7 @@ async fn hello_world(request: service::HttpRequest) -> ResultPage<Markup, FatalE
         .render()
 }
 
-#[actix_web::main]
+#[pagetop::main]
 async fn main() -> std::io::Result<()> {
     Application::prepare(&HelloWorld).unwrap().run()?.await
 }
@@ -67,7 +66,7 @@ fn after_prepare_body(page: &mut Page) {
     HighlightJS.set_theme(HljsTheme::Sunburst, page.context());
 }
 
-#[actix_web::main]
+#[pagetop::main]
 async fn main() -> std::io::Result<()> {
     Application::prepare(&HljsSample).unwrap().run()?.await
 }

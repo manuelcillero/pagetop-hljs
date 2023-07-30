@@ -93,7 +93,7 @@ pub mod prelude {
     pub use crate::HljsTheme;
 }
 
-create_handle!(MODULE_HLJS);
+new_handle!(MODULE_HLJS);
 
 static_locales!(LOCALES_HLJS);
 
