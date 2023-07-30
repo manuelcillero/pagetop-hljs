@@ -18,7 +18,7 @@
 //!
 //! impl ModuleTrait for MyModule {
 //!     // ...
-//!     fn dependencies(&self) -> Vec<ModuleStaticRef> {
+//!     fn dependencies(&self) -> Vec<ModuleRef> {
 //!         vec![
 //!             // ...
 //!             &pagetop_hljs::HighlightJS
@@ -27,7 +27,7 @@
 //!     }
 //!
 //!     fn configure_service(&self, cfg: &mut service::web::ServiceConfig) {
-//!         cfg.service(hljs_sample);
+//!         cfg.route("/", service::web::get().to(hljs_sample));
 //!     }
 //!     // ...
 //! }
@@ -60,12 +60,14 @@
 //!
 //! ## Note
 //!
-//! HighlightJS uses [`ActionAfterPrepareBody`](pagetop::response::page::ActionAfterPrepareBody)
-//! with a weight of 99 to add page assets. If you hook this action to alter HighlightJS rendering,
+//! HighlightJS hooks [`ActionAfterPrepareBody`](pagetop::response::page::ActionAfterPrepareBody)
+//! using a weight of 99 to add page assets. If you hook this action to alter HighlightJS rendering,
 //! such as setting the theme for snippets (using [`set_theme()`](crate::HighlightJS::set_theme())),
 //! ensure that your action has a weight lower than 99. Default 0 is ok.
 
-#![doc(html_favicon_url = "https://pagetop.cillero.es/theme/favicon.ico")]
+#![doc(
+    html_favicon_url = "https://raw.githubusercontent.com/manuelcillero/pagetop/main/static/theme/favicon.ico"
+)]
 #![doc(
     html_logo_url = "https://raw.githubusercontent.com/manuelcillero/pagetop-hljs/main/static/pagetop_hljs.png"
 )]

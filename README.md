@@ -40,7 +40,7 @@ use pagetop::prelude::*;
 
 impl ModuleTrait for MyModule {
     // ...
-    fn dependencies(&self) -> Vec<ModuleStaticRef> {
+    fn dependencies(&self) -> Vec<ModuleRef> {
         vec![
             // ...
             &pagetop_hljs::HighlightJS
@@ -49,7 +49,7 @@ impl ModuleTrait for MyModule {
     }
 
     fn configure_service(&self, cfg: &mut service::web::ServiceConfig) {
-        cfg.service(hljs_sample);
+        cfg.route("/", service::web::get().to(hljs_sample));
     }
     // ...
 }
@@ -80,18 +80,11 @@ fn main() {
 }
 ```
 
-## Note
-
-HighlightJS uses [`ActionAfterPrepareBody`](pagetop::response::page::ActionAfterPrepareBody) with a
-weight of 99 to add page assets. If you hook this action to alter HighlightJS rendering, such as
-setting the theme for snippets, ensure that your action has a weight lower than 99. Default 0 is ok.
-
 
 # 📦 About PageTop
 
 [PageTop](https://github.com/manuelcillero/pagetop/tree/main/pagetop) is an opinionated Rust web
-development framework to build secure, modular, and fast web Server-Side Rendering (SSR) solutions
-with ease.
+development framework to build secure and modular Server-Side Rendering (SSR) web solutions.
 
 
 # 🚧 Warning
