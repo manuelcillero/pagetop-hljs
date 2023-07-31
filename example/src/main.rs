@@ -18,8 +18,8 @@ impl ModuleTrait for HljsSample {
         vec![action!(ActionAfterPrepareBody => after_prepare_body)]
     }
 
-    fn configure_service(&self, cfg: &mut service::web::ServiceConfig) {
-        cfg.route("/", service::web::get().to(hljs_sample));
+    fn configure_service(&self, scfg: &mut service::web::ServiceConfig) {
+        scfg.route("/", service::web::get().to(hljs_sample));
     }
 }
 
@@ -41,8 +41,8 @@ impl ModuleTrait for HelloWorld {
         APP_HELLO_WORLD
     }
 
-    fn configure_service(&self, cfg: &mut service::web::ServiceConfig) {
-        cfg.route("/", service::web::get().to(hello_world));
+    fn configure_service(&self, scfg: &mut service::web::ServiceConfig) {
+        scfg.route("/", service::web::get().to(hello_world));
     }
 }
 
