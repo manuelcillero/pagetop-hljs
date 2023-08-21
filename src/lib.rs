@@ -129,7 +129,7 @@ impl ModuleTrait for HighlightJS {
     }
 
     fn configure_service(&self, cfg: &mut service::web::ServiceConfig) {
-        serve_static_files!(cfg, "/hljs", hljs);
+        static_files_service!(cfg, "/hljs", hljs);
     }
 }
 
