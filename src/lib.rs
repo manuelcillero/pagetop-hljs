@@ -95,9 +95,9 @@ pub mod prelude {
 
 new_handle!(MODULE_HLJS);
 
-static_locales!(LOCALES_HLJS);
+new_static_locales!(LOCALES_HLJS);
 
-static_files!(hljs);
+new_static_files!(hljs);
 
 // Library version.
 const VERSION_HLJS: &str = "11.7.0";
@@ -129,7 +129,7 @@ impl ModuleTrait for HighlightJS {
     }
 
     fn configure_service(&self, cfg: &mut service::web::ServiceConfig) {
-        static_files_service!(cfg, "/hljs", hljs);
+        service_for_static_files!(cfg, "/hljs", hljs);
     }
 }
 
