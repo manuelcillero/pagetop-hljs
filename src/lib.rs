@@ -93,11 +93,9 @@ pub mod prelude {
     pub use crate::HljsTheme;
 }
 
-new_handle!(MODULE_HLJS);
+static_locales!(LOCALES_HLJS);
 
-new_static_locales!(LOCALES_HLJS);
-
-new_static_files!(hljs);
+static_files!(hljs);
 
 // Library version.
 const VERSION_HLJS: &str = "11.7.0";
@@ -111,11 +109,9 @@ const PARAM_HLJS_DISABLED: &str = "hljs.disabled";
 /// Implements [`ModuleTrait`](pagetop::core::module::ModuleTrait) and specific module API.
 pub struct HighlightJS;
 
-impl ModuleTrait for HighlightJS {
-    fn handle(&self) -> Handle {
-        MODULE_HLJS
-    }
+impl_handle!(MODULE_HLJS for HighlightJS);
 
+impl ModuleTrait for HighlightJS {
     fn name(&self) -> L10n {
         L10n::t("module_name", &LOCALES_HLJS)
     }
@@ -129,7 +125,7 @@ impl ModuleTrait for HighlightJS {
     }
 
     fn configure_service(&self, cfg: &mut service::web::ServiceConfig) {
-        service_for_static_files!(cfg, "/hljs", hljs);
+        service_for_static_files!(cfg, hljs => "/hljs");
     }
 }
 

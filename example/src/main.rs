@@ -1,15 +1,11 @@
 use pagetop::prelude::*;
 use pagetop_hljs::prelude::*;
 
-new_handle!(APP_HLJS_SAMPLE);
-
 struct HljsSample;
 
-impl ModuleTrait for HljsSample {
-    fn handle(&self) -> Handle {
-        APP_HLJS_SAMPLE
-    }
+impl_handle!(APP_HLJS_SAMPLE for HljsSample);
 
+impl ModuleTrait for HljsSample {
     fn dependencies(&self) -> Vec<ModuleRef> {
         vec![&pagetop_hljs::HighlightJS]
     }
@@ -32,15 +28,11 @@ async fn hljs_sample(request: service::HttpRequest) -> ResultPage<Markup, FatalE
                 r###"
 use pagetop::prelude::*;
 
-new_handle!(APP_HELLO_WORLD);
-
 struct HelloWorld;
 
-impl ModuleTrait for HelloWorld {
-    fn handle(&self) -> Handle {
-        APP_HELLO_WORLD
-    }
+impl_handle!(APP_HELLO_WORLD for HelloWorld);
 
+impl ModuleTrait for HelloWorld {
     fn configure_service(&self, scfg: &mut service::web::ServiceConfig) {
         scfg.route("/", service::web::get().to(hello_world));
     }

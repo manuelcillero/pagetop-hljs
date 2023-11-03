@@ -4,8 +4,6 @@ use pagetop::prelude::*;
 
 use super::{HighlightJS, HljsLang};
 
-new_handle!(COMPONENT_SNIPPET);
-
 #[rustfmt::skip]
 #[derive(Default)]
 /// Component to put code snippets on web pages.
@@ -16,13 +14,11 @@ pub struct Snippet {
     code      : String,
 }
 
+impl_handle!(COMPONENT_SNIPPET for Snippet);
+
 impl ComponentTrait for Snippet {
     fn new() -> Self {
         Snippet::default()
-    }
-
-    fn handle(&self) -> Handle {
-        COMPONENT_SNIPPET
     }
 
     fn weight(&self) -> Weight {
