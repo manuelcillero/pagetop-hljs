@@ -3,7 +3,7 @@ use pagetop::prelude::*;
 use std::collections::HashMap;
 
 /// Supported coding languages.
-#[derive(Default, Eq, Hash, PartialEq)]
+#[derive(Default, Eq, PartialEq, Hash)]
 pub enum HljsLang {
     ActionScript,
     Ada,

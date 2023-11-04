@@ -11,7 +11,7 @@ use pagetop::prelude::*;
 ///
 /// assert_eq!(HljsTheme::AtelierPlateauLight.to_string(), "atelier-plateau-light".to_owned());
 /// ```
-#[derive(Eq, Hash, PartialEq)]
+#[derive(Eq, PartialEq, Hash)]
 pub enum HljsTheme {
     A11yDark,
     A11yLight,
