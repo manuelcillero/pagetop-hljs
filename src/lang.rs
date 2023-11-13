@@ -204,7 +204,7 @@ static LANGS: LazyStatic<HashMap<HljsLang, &'static str>> = LazyStatic::new(|| {
 
 impl ToString for HljsLang {
     fn to_string(&self) -> String {
-        LANGS.get(self).unwrap().to_string()
+        String::from(*LANGS.get(self).unwrap())
     }
 }
 

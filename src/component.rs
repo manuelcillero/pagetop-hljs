@@ -11,7 +11,7 @@ pub struct Snippet {
     weight    : Weight,
     renderable: Renderable,
     language  : HljsLang,
-    code      : String,
+    snippet   : String,
 }
 
 impl_handle!(COMPONENT_SNIPPET for Snippet);
@@ -25,19 +25,19 @@ impl ComponentTrait for Snippet {
         self.weight
     }
 
-    fn is_renderable(&self, context: &Context) -> bool {
-        (self.renderable.check)(context)
+    fn is_renderable(&self, cx: &Context) -> bool {
+        (self.renderable.check)(cx)
     }
 
-    fn before_prepare_component(&mut self, cx: &mut Context) {
+    fn setup_before_prepare(&mut self, cx: &mut Context) {
         HighlightJS.add_language(self.language(), cx);
     }
 
-    fn prepare_component(&self, _context: &mut Context) -> PrepareMarkup {
+    fn prepare_component(&self, _cx: &mut Context) -> PrepareMarkup {
         PrepareMarkup::With(html! {
             pre {
                 code class=(concat_string!("language-", self.language().to_string())) {
-                    (self.code())
+                    (self.snippet())
                 }
             }
         })
@@ -46,7 +46,7 @@ impl ComponentTrait for Snippet {
 
 impl Snippet {
     pub fn with(language: HljsLang, code: impl Into<String>) -> Self {
-        Snippet::new().with_language(language).with_code(code)
+        Snippet::new().with_language(language).with_snippet(code)
     }
 
     // Hljs BUILDER.
@@ -70,8 +70,8 @@ impl Snippet {
     }
 
     #[fn_builder]
-    pub fn alter_code(&mut self, code: impl Into<String>) -> &mut Self {
-        self.code = code.into().trim().to_owned();
+    pub fn alter_snippet(&mut self, snippet: impl Into<String>) -> &mut Self {
+        self.snippet = snippet.into().trim().to_owned();
         self
     }
 
@@ -81,7 +81,7 @@ impl Snippet {
         &self.language
     }
 
-    pub fn code(&self) -> &String {
-        &self.code
+    pub fn snippet(&self) -> &String {
+        &self.snippet
     }
 }

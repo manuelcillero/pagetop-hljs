@@ -75,7 +75,6 @@ pub enum HljsTheme {
     Lioshi,
     Magula,
     MonoBlue,
-    Monokai,
     MonokaiSublime,
     NightOwl,
     NnfxDark,
@@ -179,7 +178,6 @@ pub(crate) static HLJS_THEMES: LazyStatic<HashMap<HljsTheme, &'static str>> =
             Lioshi                  => "lioshi",
             Magula                  => "magula",
             MonoBlue                => "mono-blue",
-            Monokai                 => "monokai",
             MonokaiSublime          => "monokai-sublime",
             NightOwl                => "night-owl",
             NnfxDark                => "nnfx-dark",
@@ -220,7 +218,7 @@ pub(crate) static HLJS_THEMES: LazyStatic<HashMap<HljsTheme, &'static str>> =
 
 impl ToString for HljsTheme {
     fn to_string(&self) -> String {
-        HLJS_THEMES.get(self).unwrap().to_string()
+        String::from(*HLJS_THEMES.get(self).unwrap())
     }
 }
 

@@ -76,8 +76,9 @@ use pagetop::prelude::*;
 
 use std::collections::HashSet;
 
-pub mod component;
 pub mod config;
+
+pub mod component;
 
 mod lang;
 pub use lang::HljsLang;
@@ -121,7 +122,7 @@ impl ModuleTrait for HighlightJS {
     }
 
     fn actions(&self) -> Vec<Action> {
-        actions![action::page::AfterPrepareBody::with(after_prepare_body).with_weight(99)]
+        actions![action::page::AfterPrepareBody::new(after_prepare_body).with_weight(99)]
     }
 
     fn configure_service(&self, cfg: &mut service::web::ServiceConfig) {
@@ -142,7 +143,7 @@ impl HighlightJS {
         self
     }
 
-    /// change the theme for displaying code snippets. The same theme is used for all snippets in
+    /// Change the theme for displaying code snippets. The same theme is used for all snippets in
     /// the given context.
     pub fn set_theme(&self, theme: HljsTheme, cx: &mut Context) -> &Self {
         cx.set_param::<String>(PARAM_HLJS_THEME, theme.to_string());
@@ -175,35 +176,35 @@ impl HighlightJS {
 }
 
 fn after_prepare_body(page: &mut Page) {
-    let context = page.context();
+    let cx = page.context();
 
-    // The PARAM_HLJS_DISABLED parameter is set by disable_hljs(). If true, the library will be
+    // PARAM_HLJS_DISABLED parameter is set by disable_hljs(). If true, the library will be
     // disabled, preventing loading and syntax highlighting.
-    if let Some(true) = context.get_param::<bool>(PARAM_HLJS_DISABLED) {
+    if let Some(true) = cx.get_param::<bool>(PARAM_HLJS_DISABLED) {
         return;
     }
 
-    // The PARAM_HLJS_LANGS parameter stores languages (separated by semicolons) enabled by
+    // PARAM_HLJS_LANGS parameter stores languages (separated by semicolons) enabled by
     // add_language(). If empty, the library will not be loaded.
-    if let Some(languages) = context.get_param::<String>(PARAM_HLJS_LANGS) {
-        // The PARAM_HLJS_LIB parameter is modified by force_core_lib() and force_common_lib(). It
+    if let Some(languages) = cx.get_param::<String>(PARAM_HLJS_LANGS) {
+        // PARAM_HLJS_LIB parameter is modified by force_core_lib() and force_common_lib(). It
         // takes values "core" or "common" based on the invoked function. If not assigned, the
         // config::HLJS_LIB value is used, which defaults to config::SETTINGS.hljs.library or
         // "core".
-        match context
+        match cx
             .get_param::<String>(PARAM_HLJS_LIB)
             .unwrap_or(config::HLJS_LIB.to_owned())
             .as_str()
         {
             "core" => {
-                context.alter(ContextOp::AddJavaScript(
+                cx.alter(ContextOp::AddJavaScript(
                     JavaScript::at("/hljs/js/core.min.js")
                         .with_version(VERSION_HLJS)
                         .with_mode(ModeJS::Normal),
                 ));
                 let languages: HashSet<&str> = languages.split(';').collect();
                 for l in languages {
-                    context.alter(ContextOp::AddJavaScript(
+                    cx.alter(ContextOp::AddJavaScript(
                         JavaScript::at(HljsLang::to_url(l))
                             .with_version(VERSION_HLJS)
                             .with_mode(ModeJS::Normal),
@@ -211,7 +212,7 @@ fn after_prepare_body(page: &mut Page) {
                 }
             }
             _ => {
-                context.alter(ContextOp::AddJavaScript(
+                cx.alter(ContextOp::AddJavaScript(
                     JavaScript::at("/hljs/js/highlight.min.js")
                         .with_version(VERSION_HLJS)
                         .with_mode(ModeJS::Normal),
@@ -220,7 +221,7 @@ fn after_prepare_body(page: &mut Page) {
         }
 
         // Configure highlight.js (disabling language autodetection).
-        context.alter(ContextOp::AddHeadScript(
+        cx.alter(ContextOp::AddHeadScript(
             HeadScript::named("highlight.js").with_code(concat_string!(
                 r###"
     hljs.configure({
@@ -234,13 +235,13 @@ fn after_prepare_body(page: &mut Page) {
             )),
         ));
 
-        // The PARAM_HLJS_THEME parameter stores the theme enabled by set_theme(). If empty, the
+        // PARAM_HLJS_THEME parameter stores the theme enabled by set_theme(). If empty, the
         // config::HLJS_THEME value is used, which defaults to config::SETTINGS.hljs.theme or
         // HljsTheme::Default.
-        let theme = context
+        let theme = cx
             .get_param::<String>(PARAM_HLJS_THEME)
             .unwrap_or(config::HLJS_THEME.to_string());
-        context.alter(ContextOp::AddStyleSheet(
+        cx.alter(ContextOp::AddStyleSheet(
             StyleSheet::at(HljsTheme::to_url(theme.as_str())).with_version(VERSION_HLJS),
         ));
     }
