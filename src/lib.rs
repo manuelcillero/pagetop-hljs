@@ -88,7 +88,7 @@ pub use theme::HljsTheme;
 
 /// The HighlighJS Prelude.
 pub mod prelude {
-    pub use crate::component::{Snippet, COMPONENT_SNIPPET};
+    pub use crate::component::Snippet;
     pub use crate::HighlightJS;
     pub use crate::HljsLang;
     pub use crate::HljsTheme;
@@ -108,9 +108,8 @@ const PARAM_HLJS_THEME: &str = "hljs.theme";
 const PARAM_HLJS_DISABLED: &str = "hljs.disabled";
 
 /// Implements [`ModuleTrait`](pagetop::core::module::ModuleTrait) and specific module API.
+#[derive(AssignHandle)]
 pub struct HighlightJS;
-
-impl_handle!(MODULE_HLJS for HighlightJS);
 
 impl ModuleTrait for HighlightJS {
     fn name(&self) -> L10n {

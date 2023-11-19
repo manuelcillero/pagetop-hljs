@@ -1,9 +1,8 @@
 use pagetop::prelude::*;
 use pagetop_hljs::prelude::*;
 
+#[derive(AssignHandle)]
 struct HljsSample;
-
-impl_handle!(APP_HLJS_SAMPLE for HljsSample);
 
 impl ModuleTrait for HljsSample {
     fn dependencies(&self) -> Vec<ModuleRef> {
@@ -28,9 +27,8 @@ async fn hljs_sample(request: service::HttpRequest) -> ResultPage<Markup, FatalE
                 r###"
 use pagetop::prelude::*;
 
+#[derive(AssignHandle)]
 struct HelloWorld;
-
-impl_handle!(APP_HELLO_WORLD for HelloWorld);
 
 impl ModuleTrait for HelloWorld {
     fn configure_service(&self, scfg: &mut service::web::ServiceConfig) {
