@@ -2,16 +2,16 @@
 
   <h1>PageTop HighlightJS</h1>
 
-  [![crates.io](https://img.shields.io/crates/v/pagetop-hljs.svg)](https://crates.io/crates/pagetop-hljs)
-  [![docs.rs](https://docs.rs/pagetop-hljs/badge.svg)](https://docs.rs/pagetop-hljs)
-  [![Dependencies](https://deps.rs/crate/pagetop-hljs/0.0.2/status.svg)](https://deps.rs/crate/pagetop-hljs/0.0.2)
-  [![MIT or Apache 2.0 licensed](https://img.shields.io/crates/l/pagetop-hljs.svg)](#license)
+  [![License](https://img.shields.io/badge/license-MIT%2FApache-blue.svg?style=for-the-badge)](#license)
+  [![API Docs](https://img.shields.io/docsrs/pagetop-hljs?label=API%20Docs&style=for-the-badge&logo=Docs.rs)](https://docs.rs/pagetop-hljs)
+  [![Crates.io](https://img.shields.io/crates/v/pagetop-hljs.svg?style=for-the-badge&logo=ipfs)](https://crates.io/crates/pagetop-hljs)
+  [![Downloads](https://img.shields.io/crates/d/pagetop-hljs.svg?style=for-the-badge&logo=transmission)](https://crates.io/crates/pagetop-hljs)
 
 </div>
 
 ---
 
-**HighlightJS** (`pagetop-hljs`) is a PageTop module that displays beautiful code snippets on web
+**HighlightJS** (`pagetop-hljs`) is a PageTop package that displays beautiful code snippets on web
 pages using the versatile [highlight.js](https://highlightjs.org/) JavaScript library.
 
 ## Features
@@ -38,9 +38,9 @@ Add the dependency `pagetop_hljs::HighlightJS` to your module:
 ```rust
 use pagetop::prelude::*;
 
-impl ModuleTrait for MyModule {
+impl PackageTrait for MyPackage {
     // ...
-    fn dependencies(&self) -> Vec<ModuleRef> {
+    fn dependencies(&self) -> Vec<PackageRef> {
         vec![
             // ...
             &pagetop_hljs::HighlightJS
@@ -61,9 +61,9 @@ Now you can put code snippets on web pages:
 use pagetop_hljs::prelude::*;
 
 #[service::get("/")]
-async fn hljs_sample(request: service::HttpRequest) -> ResultPage<Markup, FatalError> {
+async fn hljs_sample(request: service::HttpRequest) -> ResultPage<Markup, ErrorPage> {
     Page::new(request)
-        .with_in(
+        .with_component_in(
             "content",
             Snippet::with(
                 HljsLang::Rust,
@@ -83,7 +83,7 @@ fn main() {
 
 # 📦 About PageTop
 
-[PageTop](https://github.com/manuelcillero/pagetop/tree/main/pagetop) is an opinionated Rust web
+[PageTop](https://docs.rs/pagetop) is an opinionated [Rust](https://www.rust-lang.org) web
 development framework to build secure and modular Server-Side Rendering (SSR) web solutions.
 
 
@@ -95,10 +95,13 @@ frequent changes. Production use is not recommended until version **0.1.0**.
 
 # 📜 License
 
-This project is licensed under either of the following licenses, at your option:
+All code in this project is dual-licensed under either:
+
+  * MIT License
+    ([LICENSE-MIT](LICENSE-MIT) or https://opensource.org/licenses/MIT)
 
   * Apache License, Version 2.0,
     ([LICENSE-APACHE](LICENSE-APACHE) or https://www.apache.org/licenses/LICENSE-2.0)
 
-  * MIT License
-    ([LICENSE-MIT](LICENSE-MIT) or https://opensource.org/licenses/MIT)
+at your option. This means you can select the license you prefer! This dual-licensing approach is
+the de-facto standard in the Rust ecosystem.

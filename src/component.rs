@@ -49,25 +49,25 @@ impl Snippet {
 
     // Hljs BUILDER.
 
-    #[fn_builder]
+    #[fn_with]
     pub fn alter_weight(&mut self, value: Weight) -> &mut Self {
         self.weight = value;
         self
     }
 
-    #[fn_builder]
+    #[fn_with]
     pub fn alter_renderable(&mut self, check: FnIsRenderable) -> &mut Self {
         self.renderable.check = check;
         self
     }
 
-    #[fn_builder]
+    #[fn_with]
     pub fn alter_language(&mut self, language: HljsLang) -> &mut Self {
         self.language = language;
         self
     }
 
-    #[fn_builder]
+    #[fn_with]
     pub fn alter_snippet(&mut self, snippet: impl Into<String>) -> &mut Self {
         self.snippet = snippet.into().trim().to_owned();
         self

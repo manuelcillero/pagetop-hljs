@@ -1,4 +1,4 @@
-//! Configuration settings for HighlightJS module.
+//! Configuration settings for HighlightJS package.
 //!
 //! Example:
 //!

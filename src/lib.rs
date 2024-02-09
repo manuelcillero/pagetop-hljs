@@ -1,4 +1,4 @@
-//! **HighlightJS** (`pagetop-hljs`) is a [PageTop](https://docs.rs/pagetop) module that displays
+//! **HighlightJS** (`pagetop-hljs`) is a [PageTop](https://docs.rs/pagetop) package that displays
 //! beautiful code snippets on web pages using the versatile [highlight.js](https://highlightjs.org)
 //! JavaScript library.
 //!
@@ -11,14 +11,14 @@
 //! pagetop-hljs = "<Version>"
 //! ```
 //!
-//! Add the dependency `pagetop_hljs::HighlightJS` to your module:
+//! Add the dependency `pagetop_hljs::HighlightJS` to your package:
 //!
 //! ```rust
 //! use pagetop::prelude::*;
 //!
-//! impl ModuleTrait for MyModule {
+//! impl Package for MyPackage {
 //!     // ...
-//!     fn dependencies(&self) -> Vec<ModuleRef> {
+//!     fn dependencies(&self) -> Vec<PackageRef> {
 //!         vec![
 //!             // ...
 //!             &pagetop_hljs::HighlightJS
@@ -39,9 +39,9 @@
 //! use pagetop_hljs::prelude::*;
 //!
 //! #[service::get("/")]
-//! async fn hljs_sample(request: service::HttpRequest) -> ResultPage<Markup, FatalError> {
+//! async fn hljs_sample(request: service::HttpRequest) -> ResultPage<Markup, ErrorPage> {
 //!     Page::new(request)
-//!         .with_in(
+//!         .with_component_in(
 //!             "content",
 //!             Snippet::with(
 //!                 HljsLang::Rust,
@@ -107,17 +107,17 @@ const PARAM_HLJS_LANGS: &str = "hljs.langs";
 const PARAM_HLJS_THEME: &str = "hljs.theme";
 const PARAM_HLJS_DISABLED: &str = "hljs.disabled";
 
-/// Implements [`ModuleTrait`](pagetop::core::module::ModuleTrait) and specific module API.
+/// Implements [`Package`](pagetop::core::package::Package) and specific package API.
 #[derive(AssignHandle)]
 pub struct HighlightJS;
 
-impl ModuleTrait for HighlightJS {
+impl PackageTrait for HighlightJS {
     fn name(&self) -> L10n {
-        L10n::t("module_name", &LOCALES_HLJS)
+        L10n::t("package_name", &LOCALES_HLJS)
     }
 
     fn description(&self) -> L10n {
-        L10n::t("module_description", &LOCALES_HLJS)
+        L10n::t("package_description", &LOCALES_HLJS)
     }
 
     fn actions(&self) -> Vec<Action> {
