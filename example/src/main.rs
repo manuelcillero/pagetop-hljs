@@ -1,7 +1,6 @@
 use pagetop::prelude::*;
 use pagetop_hljs::prelude::*;
 
-#[derive(AssignHandle)]
 struct HljsSample;
 
 impl PackageTrait for HljsSample {
@@ -27,7 +26,6 @@ async fn hljs_sample(request: service::HttpRequest) -> ResultPage<Markup, ErrorP
                 r###"
 use pagetop::prelude::*;
 
-#[derive(AssignHandle)]
 struct HelloWorld;
 
 impl Package for HelloWorld {
@@ -44,7 +42,7 @@ async fn hello_world(request: service::HttpRequest) -> ResultPage<Markup, ErrorP
 
 #[pagetop::main]
 async fn main() -> std::io::Result<()> {
-    Application::prepare(&HelloWorld).unwrap().run()?.await
+    Application::prepare(&HelloWorld).run()?.await
 }
                 "###,
             ),
@@ -58,5 +56,5 @@ fn after_prepare_body(page: &mut Page) {
 
 #[pagetop::main]
 async fn main() -> std::io::Result<()> {
-    Application::prepare(&HljsSample).unwrap().run()?.await
+    Application::prepare(&HljsSample).run()?.await
 }

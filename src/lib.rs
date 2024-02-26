@@ -108,7 +108,6 @@ const PARAM_HLJS_THEME: &str = "hljs.theme";
 const PARAM_HLJS_DISABLED: &str = "hljs.disabled";
 
 /// Implements [`Package`](pagetop::core::package::Package) and specific package API.
-#[derive(AssignHandle)]
 pub struct HighlightJS;
 
 impl PackageTrait for HighlightJS {

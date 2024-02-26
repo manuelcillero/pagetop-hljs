@@ -5,7 +5,7 @@ use pagetop::prelude::*;
 use super::{HighlightJS, HljsLang};
 
 #[rustfmt::skip]
-#[derive(AssignHandle, SmartDefault)]
+#[derive(SmartDefault)]
 /// Component to put code snippets on web pages.
 pub struct Snippet {
     weight    : Weight,

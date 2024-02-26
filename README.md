@@ -2,7 +2,7 @@
 
   <h1>PageTop HighlightJS</h1>
 
-  [![License](https://img.shields.io/badge/license-MIT%2FApache-blue.svg?style=for-the-badge)](#license)
+  [![License](https://img.shields.io/badge/license-MIT%2FApache-blue.svg?style=for-the-badge)](#-license)
   [![API Docs](https://img.shields.io/docsrs/pagetop-hljs?label=API%20Docs&style=for-the-badge&logo=Docs.rs)](https://docs.rs/pagetop-hljs)
   [![Crates.io](https://img.shields.io/crates/v/pagetop-hljs.svg?style=for-the-badge&logo=ipfs)](https://crates.io/crates/pagetop-hljs)
   [![Downloads](https://img.shields.io/crates/d/pagetop-hljs.svg?style=for-the-badge&logo=transmission)](https://crates.io/crates/pagetop-hljs)
