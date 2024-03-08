@@ -39,10 +39,9 @@
 //! use pagetop_hljs::prelude::*;
 //!
 //! #[service::get("/")]
-//! async fn hljs_sample(request: service::HttpRequest) -> ResultPage<Markup, ErrorPage> {
+//! async fn hljs_sample(request: HttpRequest) -> ResultPage<Markup, ErrorPage> {
 //!     Page::new(request)
-//!         .with_component_in(
-//!             "content",
+//!         .with_component(
 //!             Snippet::with(
 //!                 HljsLang::Rust,
 //!                 r###"
