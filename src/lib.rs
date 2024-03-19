@@ -194,14 +194,14 @@ fn after_prepare_body(page: &mut Page) {
             .as_str()
         {
             "core" => {
-                cx.alter(ContextOp::AddJavaScript(
+                cx.alter_assets(AssetsOp::AddJavaScript(
                     JavaScript::at("/hljs/js/core.min.js")
                         .with_version(VERSION_HLJS)
                         .with_mode(ModeJS::Normal),
                 ));
                 let languages: HashSet<&str> = languages.split(';').collect();
                 for l in languages {
-                    cx.alter(ContextOp::AddJavaScript(
+                    cx.alter_assets(AssetsOp::AddJavaScript(
                         JavaScript::at(HljsLang::to_url(l))
                             .with_version(VERSION_HLJS)
                             .with_mode(ModeJS::Normal),
@@ -209,7 +209,7 @@ fn after_prepare_body(page: &mut Page) {
                 }
             }
             _ => {
-                cx.alter(ContextOp::AddJavaScript(
+                cx.alter_assets(AssetsOp::AddJavaScript(
                     JavaScript::at("/hljs/js/highlight.min.js")
                         .with_version(VERSION_HLJS)
                         .with_mode(ModeJS::Normal),
@@ -218,7 +218,7 @@ fn after_prepare_body(page: &mut Page) {
         }
 
         // Configure highlight.js (disabling language autodetection).
-        cx.alter(ContextOp::AddHeadScript(
+        cx.alter_assets(AssetsOp::AddHeadScript(
             HeadScript::named("highlight.js").with_code(concat_string!(
                 r###"
     hljs.configure({
@@ -238,7 +238,7 @@ fn after_prepare_body(page: &mut Page) {
         let theme = cx
             .get_param::<String>(PARAM_HLJS_THEME)
             .unwrap_or(config::HLJS_THEME.to_string());
-        cx.alter(ContextOp::AddStyleSheet(
+        cx.alter_assets(AssetsOp::AddStyleSheet(
             StyleSheet::at(HljsTheme::to_url(theme.as_str())).with_version(VERSION_HLJS),
         ));
     }
