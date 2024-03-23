@@ -3,16 +3,20 @@ name = "pagetop-hljs"
 version = "0.0.11"
 edition = "2021"
 
-authors = [
-    "Manuel Cillero <manuel@cillero.es>"
-]
-description = """\
-    PageTop package that displays beautiful code snippets on web pages using the highlight.js \
-    JavaScript library.
-"""
+description = "PageTop package to display beautiful code snippets on web pages."
 homepage = "https://pagetop.cillero.es"
 repository = "https://github.com/manuelcillero/pagetop-hljs"
 license = "Apache-2.0 OR MIT"
+
+authors = [
+    "Manuel Cillero <manuel@cillero.es>"
+]
+categories = [
+    "web-programming", "gui"
+]
+keywords = [
+    "pagetop", "highlight", "parse", "parsing", "component"
+]
 
 [dependencies]
 pagetop = { version = "0.0", path = "../pagetop" }

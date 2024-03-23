@@ -1,21 +1,19 @@
 <div align="center">
 
-  <h1>PageTop HighlightJS</h1>
+<h1>PageTop HighlightJS</h1>
 
-  [![License](https://img.shields.io/badge/license-MIT%2FApache-blue.svg?style=for-the-badge)](#-license)
-  [![API Docs](https://img.shields.io/docsrs/pagetop-hljs?label=API%20Docs&style=for-the-badge&logo=Docs.rs)](https://docs.rs/pagetop-hljs)
-  [![Crates.io](https://img.shields.io/crates/v/pagetop-hljs.svg?style=for-the-badge&logo=ipfs)](https://crates.io/crates/pagetop-hljs)
-  [![Downloads](https://img.shields.io/crates/d/pagetop-hljs.svg?style=for-the-badge&logo=transmission)](https://crates.io/crates/pagetop-hljs)
+<p>PageTop package to display beautiful code snippets on web pages.</p>
+
+[![License](https://img.shields.io/badge/license-MIT%2FApache-blue.svg?style=for-the-badge)](#-license)
+[![API Docs](https://img.shields.io/docsrs/pagetop-hljs?label=API%20Docs&style=for-the-badge&logo=Docs.rs)](https://docs.rs/pagetop-hljs)
+[![Crates.io](https://img.shields.io/crates/v/pagetop-hljs.svg?style=for-the-badge&logo=ipfs)](https://crates.io/crates/pagetop-hljs)
+[![Downloads](https://img.shields.io/crates/d/pagetop-hljs.svg?style=for-the-badge&logo=transmission)](https://crates.io/crates/pagetop-hljs)
 
 </div>
 
----
+## Overview
 
-**HighlightJS** (`pagetop-hljs`) is a PageTop package that displays beautiful code snippets on web
-pages using the versatile [highlight.js](https://highlightjs.org/) JavaScript library.
-
-## Features
-
+  * Utilizes the versatile [highlight.js](https://highlightjs.org/) JavaScript library.
   * Supports **90+** coding languages.
   * Choose from all **95+** available themes.
   * Provides a component for adding code snippets.
@@ -82,8 +80,8 @@ fn main() {
 
 # 📦 About PageTop
 
-[PageTop](https://docs.rs/pagetop) is an opinionated [Rust](https://www.rust-lang.org) web
-development framework to build secure and modular Server-Side Rendering (SSR) web solutions.
+[PageTop](https://docs.rs/pagetop) is an opinionated web framework to build modular *Server-Side
+Rendering* web solutions.
 
 
 # 🚧 Warning
