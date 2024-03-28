@@ -118,7 +118,7 @@ impl PackageTrait for HighlightJS {
         L10n::t("package_description", &LOCALES_HLJS)
     }
 
-    fn actions(&self) -> Vec<Action> {
+    fn actions(&self) -> Vec<ActionBox> {
         actions![action::page::AfterPrepareBody::new(after_prepare_body).with_weight(99)]
     }
 

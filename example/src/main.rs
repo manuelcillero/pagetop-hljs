@@ -8,7 +8,7 @@ impl PackageTrait for HljsSample {
         vec![&pagetop_hljs::HighlightJS]
     }
 
-    fn actions(&self) -> Vec<Action> {
+    fn actions(&self) -> Vec<ActionBox> {
         actions![action::page::AfterPrepareBody::new(after_prepare_body)]
     }
 
