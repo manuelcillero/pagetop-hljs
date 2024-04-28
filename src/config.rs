@@ -1,10 +1,10 @@
-//! Configuration settings for HighlightJS package.
+//! Configuration settings for package.
 //!
 //! Example:
 //!
 //! ```toml
 //! [hljs]
-//! library = "common"
+//! mode = "core"
 //! theme = "zenburn"
 //! tabsize = 8
 //! ```
@@ -16,34 +16,34 @@
 //!
 //! assert_eq!(config::SETTINGS.hljs.theme, "zenburn");
 //! ```
-//! See [`pagetop::config`](pagetop::config) to learn how **PageTop** read configuration files and
-//! use settings.
+//! See [`pagetop::config`] to learn how PageTop reads configuration files and uses settings.
 
 use pagetop::prelude::*;
 
-use super::theme::HLJS_THEMES;
-use super::HljsTheme;
+use crate::{HljsMode, HljsTheme};
 
 use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
-/// Type for HighlightJS configuration settings, section [`[hljs]`](Hljs) (used by [`SETTINGS`]).
+/// Configuration settings for the [`[hljs]`](Hljs) section (see [`SETTINGS`] package).
 pub struct Settings {
     pub hljs: Hljs,
 }
 #[derive(Debug, Deserialize)]
-/// Struct for section `[hljs]` of [`Settings`] type.
+/// Section `[hljs]` of the configuration settings.
+///
+/// See [`Settings`].
 pub struct Hljs {
-    /// You can use the ***core*** library to import only the languages added by each snippet (see
-    /// [`add_language()`](crate::HighlightJS::add_language())), or use the ***common*** library
-    /// which supports around 40 popular languages. However, using the common library will restrict
-    /// its usage to only these preloaded languages.
+    /// Use ***core*** to import a minimal library and load only the languages added via
+    /// [`add_hljs_language()`](crate::HljsContext::add_hljs_language). Alternatively, ***common***
+    /// imports an extended library containing around 40 popular languages (see
+    /// [`HljsLang`](crate::HljsLang)). Note that using the *common* library restricts you to the
+    /// languages that are preloaded.
     /// Default value: *"core"*
-    pub library: String,
-    /// Default theme to display code snippets on web pages, written in *kebab-case* (see
-    /// [`HljsTheme`](crate::HljsTheme)).
+    pub mode: HljsMode,
+    /// Default theme in kebab-case used to display code snippets on web pages (see [`HljsTheme`]).
     /// Default value: *"default"*
-    pub theme: String,
+    pub theme: HljsTheme,
     /// Number of spaces for *tab* character.
     /// Default value: *4*
     pub tabsize: usize,
@@ -51,35 +51,7 @@ pub struct Hljs {
 
 default_settings!(
     // [hljs]
-    "hljs.library" => "core",
+    "hljs.mode"    => "core",
     "hljs.theme"   => "default",
     "hljs.tabsize" => 4,
 );
-
-// Defaults to valid SETTINGS.hljs.library or "core".
-pub(crate) static HLJS_LIB: LazyStatic<&str> =
-    LazyStatic::new(|| match SETTINGS.hljs.library.to_lowercase().as_str() {
-        "core" => "core",
-        "common" => "common",
-        _ => {
-            trace::warn!(
-                "Unrecognized '{}' HighlightJS library, 'core' is assumed",
-                SETTINGS.hljs.library,
-            );
-            "core"
-        }
-    });
-
-// Defaults to valid SETTINGS.hljs.theme or HljsTheme::Default.
-pub(crate) static HLJS_THEME: LazyStatic<&HljsTheme> = LazyStatic::new(|| {
-    let theme = SETTINGS.hljs.theme.to_lowercase();
-    if let Some((t, _)) = HLJS_THEMES.iter().find(|(_, &v)| v == theme) {
-        t
-    } else {
-        trace::warn!(
-            "Unrecognized theme '{}' for HighlightJS, 'default' is assumed",
-            SETTINGS.hljs.theme,
-        );
-        &HljsTheme::Default
-    }
-});

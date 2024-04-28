@@ -9,7 +9,12 @@ impl PackageTrait for HljsSample {
     }
 
     fn actions(&self) -> Vec<ActionBox> {
-        actions![action::page::AfterPrepareBody::new(after_prepare_body)]
+        actions![
+            // Switch the HighlightJS theme once the body page is ready.
+            action::page::AfterPrepareBody::new(|page: &mut Page| page
+                .context()
+                .set_hljs_theme(&HljsTheme::Sunburst))
+        ]
     }
 
     fn configure_service(&self, scfg: &mut service::web::ServiceConfig) {
@@ -19,10 +24,9 @@ impl PackageTrait for HljsSample {
 
 async fn hljs_sample(request: HttpRequest) -> ResultPage<Markup, ErrorPage> {
     Page::new(request)
-        .with_component(
-            Snippet::with(
-                HljsLang::Rust,
-                r###"
+        .with_component(Snippet::with(
+            HljsLang::Rust,
+            r###"
 use pagetop::prelude::*;
 
 struct HelloWorld;
@@ -43,14 +47,9 @@ async fn hello_world(request: HttpRequest) -> ResultPage<Markup, ErrorPage> {
 async fn main() -> std::io::Result<()> {
     Application::prepare(&HelloWorld).run()?.await
 }
-                "###,
-            ),
-        )
+"###,
+        ))
         .render()
-}
-
-fn after_prepare_body(page: &mut Page) {
-    HighlightJS.set_theme(HljsTheme::Sunburst, page.context());
 }
 
 #[pagetop::main]

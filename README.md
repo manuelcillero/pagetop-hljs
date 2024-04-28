@@ -24,14 +24,14 @@
 
 ## Usage
 
-Add the following to your `Cargo.toml`:
+Add `pagetop-hljs` to your `Cargo.toml`:
 
 ```rust
 [dependencies]
 pagetop-hljs = "<Version>"
 ```
 
-Add the dependency `pagetop_hljs::HighlightJS` to your module:
+Add `pagetop_hljs::HighlightJS` to your dependencies package:
 
 ```rust
 use pagetop::prelude::*;
@@ -41,7 +41,7 @@ impl PackageTrait for MyPackage {
     fn dependencies(&self) -> Vec<PackageRef> {
         vec![
             // ...
-            &pagetop_hljs::HighlightJS
+            &pagetop_hljs::HighlightJS,
             // ...
         ]
     }
@@ -53,7 +53,7 @@ impl PackageTrait for MyPackage {
 }
 ```
 
-Now you can put code snippets on web pages:
+And put your code snippets on web pages:
 
 ```rust
 use pagetop_hljs::prelude::*;
@@ -61,18 +61,16 @@ use pagetop_hljs::prelude::*;
 #[service::get("/")]
 async fn hljs_sample(request: HttpRequest) -> ResultPage<Markup, ErrorPage> {
     Page::new(request)
-        .with_component(
-            Snippet::with(
-                HljsLang::Rust,
-                r###"
+        .with_component(Snippet::with(
+            HljsLang::Rust,
+            r###"
 // This is the main function.
 fn main() {
     // Print text to the console.
     println!("Hello World!");
 }
-                "###,
-            ),
-        )
+            "###,
+        ))
         .render()
 }
 ```

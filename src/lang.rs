@@ -1,10 +1,66 @@
 use pagetop::prelude::*;
 
 use std::collections::HashMap;
+use std::fmt;
+use std::str::FromStr;
 
 /// Supported coding languages.
-#[derive(Default, Eq, PartialEq, Hash)]
+///
+/// Languages are represented by *PascalCase* enums within the code and are mapped to corresponding
+/// [highlight.js](https://highlightjs.org/) language names.
+///
+/// ```rust
+/// use pagetop_hljs::HljsLang;
+///
+/// assert_eq!(HljsLang::CoffeeScript.to_string(), "coffeescript".to_string());
+/// ```
+#[derive(AutoDefault, Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub enum HljsLang {
+    // Common languages.
+    Bash,
+    C,
+    Cpp,
+    Csharp,
+    CSS,
+    Diff,
+    Go,
+    GraphQL,
+    HTML,
+    INI,
+    Java,
+    JavaScript,
+    JSON,
+    Kotlin,
+    Less,
+    Lua,
+    Makefile,
+    Markdown,
+    ObjectiveC,
+    Perl,
+    PHP,
+    PHPTemplate,
+    #[default]
+    Plaintext,
+    Python,
+    PythonREPL,
+    R,
+    Ruby,
+    Rust,
+    SCSS,
+    ShellSession,
+    SQL,
+    Swift,
+    TOML,
+    TypeScript,
+    VisualBasicNET,
+    WebAssembly,
+    XML,
+    /// Enum variants for languages ranging from `Bash` to `YAML` are all preloaded in the
+    /// ***common*** mode. To include additional languages, use the default ***core*** mode.
+    ///
+    /// See [`config::SETTINGS.hljs.mode`](crate::config::Hljs#structfield.mode).
+    YAML,
+    // Additional languages.
     ActionScript,
     Ada,
     Apache,
@@ -16,21 +72,15 @@ pub enum HljsLang {
     AutoHotkey,
     AVRAssembly,
     Awk,
-    Bash,
     BASIC,
-    C,
     Clojure,
     ClojureREPL,
     CMake,
     CoffeeScript,
-    Cpp,
     Crystal,
-    Csharp,
-    CSS,
     D,
     Dart,
     Delphy,
-    Diff,
     Django,
     DNSZone,
     Dockerfile,
@@ -42,66 +92,33 @@ pub enum HljsLang {
     ErlangREPL,
     Fortran,
     Fsharp,
-    Go,
-    GraphQL,
     Handlebars,
     Haskell,
-    HTML,
     HTTP,
-    INI,
-    Java,
-    JavaScript,
-    JSON,
     Julia,
     JuliaREPL,
-    Kotlin,
     LaTeX,
-    Less,
     Lisp,
     LLVMIR,
-    Lua,
     Matlab,
-    Makefile,
-    Markdown,
     Nginx,
     NodeREPL,
-    ObjectiveC,
     Ocaml,
-    Perl,
-    PHP,
-    PHPTemplate,
-    #[default]
-    Plaintext,
     PostgreSQL,
     PowerShell,
     Prolog,
     Properties,
-    Python,
-    PythonREPL,
-    R,
-    Ruby,
-    Rust,
     Scala,
     Scheme,
     Scilab,
-    SCSS,
-    ShellSession,
     Smalltalk,
-    SQL,
-    Swift,
     Tcl,
-    TOML,
     Twig,
-    TypeScript,
     VBScript,
-    VisualBasicNET,
-    WebAssembly,
     X86Asm,
-    XML,
-    YAML,
 }
 
-static LANGS: LazyStatic<HashMap<HljsLang, &'static str>> = LazyStatic::new(|| {
+static HLJS_LANGS: LazyStatic<HashMap<HljsLang, &'static str>> = LazyStatic::new(|| {
     use HljsLang::*;
     kv![
         // Common languages.
@@ -143,7 +160,7 @@ static LANGS: LazyStatic<HashMap<HljsLang, &'static str>> = LazyStatic::new(|| {
         WebAssembly    => "wasm",
         XML            => "xml",
         YAML           => "yaml",
-        // Other languages.
+        // Additional languages.
         ActionScript   => "actionscript",
         Ada            => "ada",
         Apache         => "apache",
@@ -204,12 +221,24 @@ static LANGS: LazyStatic<HashMap<HljsLang, &'static str>> = LazyStatic::new(|| {
 
 impl ToString for HljsLang {
     fn to_string(&self) -> String {
-        String::from(*LANGS.get(self).unwrap())
+        String::from(*HLJS_LANGS.get(self).unwrap())
+    }
+}
+
+impl FromStr for HljsLang {
+    type Err = fmt::Error;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        HLJS_LANGS
+            .iter()
+            .find_map(|(&key, &value)| if value == s { Some(key) } else { None })
+            .ok_or_else(|| fmt::Error)
     }
 }
 
 impl HljsLang {
-    pub fn to_url(language: &str) -> String {
+    pub(crate) fn to_url(language: impl Into<String>) -> String {
+        let language = language.into();
         concat_string!("/hljs/js/languages/", language, ".min.js")
     }
 }
