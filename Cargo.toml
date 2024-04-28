@@ -1,6 +1,6 @@
 [package]
 name = "pagetop-hljs"
-version = "0.0.12"
+version = "0.0.13"
 edition = "2021"
 
 description = "PageTop package to display beautiful code snippets on web pages."
