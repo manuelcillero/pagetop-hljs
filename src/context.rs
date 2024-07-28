@@ -43,15 +43,15 @@ pub trait HljsContext {
 
 impl HljsContext for Context {
     fn enable_hljs(&mut self) {
-        self.set_param::<bool>(PARAM_HLJS_ENABLED, true);
+        self.set_param::<bool>(PARAM_HLJS_ENABLED, &true);
     }
 
     fn disable_hljs(&mut self) {
-        self.set_param::<bool>(PARAM_HLJS_ENABLED, false);
+        self.set_param::<bool>(PARAM_HLJS_ENABLED, &false);
     }
 
     fn force_hljs_mode(&mut self, mode: &HljsMode) {
-        self.set_param::<HljsMode>(PARAM_HLJS_MODE, *mode);
+        self.set_param::<HljsMode>(PARAM_HLJS_MODE, mode);
     }
 
     fn add_hljs_language(&mut self, language: &HljsLang) {
@@ -59,11 +59,11 @@ impl HljsContext for Context {
             Ok(previous) => concat_string!(previous, ";", language.to_string()),
             _ => language.to_string(),
         };
-        self.set_param::<String>(PARAM_HLJS_LANGS, languages);
+        self.set_param::<String>(PARAM_HLJS_LANGS, &languages);
     }
 
     fn set_hljs_theme(&mut self, theme: &HljsTheme) {
-        self.set_param::<String>(PARAM_HLJS_THEME, theme.to_string());
+        self.set_param::<String>(PARAM_HLJS_THEME, &theme.to_string());
     }
 
     // HljsContext GETTERS.

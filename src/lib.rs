@@ -128,13 +128,13 @@ fn after_prepare_body(page: &mut Page) {
         if let Some(languages) = cx.hljs_languages() {
             match cx.hljs_mode() {
                 HljsMode::Core => {
-                    cx.alter_assets(AssetsOp::AddJavaScript(
+                    cx.set_assets(AssetsOp::AddJavaScript(
                         JavaScript::at("/hljs/js/core.min.js")
                             .with_version(HLJS_VERSION)
                             .with_mode(ModeJS::Normal),
                     ));
                     for l in languages {
-                        cx.alter_assets(AssetsOp::AddJavaScript(
+                        cx.set_assets(AssetsOp::AddJavaScript(
                             JavaScript::at(HljsLang::to_url(l))
                                 .with_version(HLJS_VERSION)
                                 .with_mode(ModeJS::Normal),
@@ -142,7 +142,7 @@ fn after_prepare_body(page: &mut Page) {
                     }
                 }
                 _ => {
-                    cx.alter_assets(AssetsOp::AddJavaScript(
+                    cx.set_assets(AssetsOp::AddJavaScript(
                         JavaScript::at("/hljs/js/highlight.min.js")
                             .with_version(HLJS_VERSION)
                             .with_mode(ModeJS::Normal),
@@ -152,7 +152,7 @@ fn after_prepare_body(page: &mut Page) {
 
             // Configure highlight.js (disabling language autodetection).
             #[rustfmt::skip]
-            cx.alter_assets(AssetsOp::AddHeadScript(
+            cx.set_assets(AssetsOp::AddHeadScript(
                 HeadScript::named("highlight.js").with_code(concat_string!("
                     hljs.configure({
                         tabReplace: '", " ".repeat(config::SETTINGS.hljs.tabsize), "',
@@ -162,7 +162,7 @@ fn after_prepare_body(page: &mut Page) {
                 ")),
             ));
 
-            cx.alter_assets(AssetsOp::AddStyleSheet(
+            cx.set_assets(AssetsOp::AddStyleSheet(
                 StyleSheet::at(HljsTheme::to_url(cx.hljs_theme().to_string()))
                     .with_version(HLJS_VERSION),
             ));

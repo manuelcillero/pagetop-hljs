@@ -1,8 +1,10 @@
 use pagetop::prelude::*;
 
 use std::collections::HashMap;
-use std::fmt;
 use std::str::FromStr;
+use std::sync::LazyLock;
+
+use std::fmt;
 
 /// Supported coding languages.
 ///
@@ -118,7 +120,7 @@ pub enum HljsLang {
     X86Asm,
 }
 
-static HLJS_LANGS: LazyStatic<HashMap<HljsLang, &'static str>> = LazyStatic::new(|| {
+static HLJS_LANGS: LazyLock<HashMap<HljsLang, &'static str>> = LazyLock::new(|| {
     use HljsLang::*;
     kv![
         // Common languages.

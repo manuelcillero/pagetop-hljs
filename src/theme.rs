@@ -3,8 +3,10 @@ use pagetop::prelude::*;
 use serde::{Deserialize, Deserializer};
 
 use std::collections::HashMap;
-use std::fmt;
 use std::str::FromStr;
+use std::sync::LazyLock;
+
+use std::fmt;
 
 /// Supported themes.
 ///
@@ -117,7 +119,7 @@ pub enum HljsTheme {
     Zenburn,
 }
 
-static HLJS_THEMES: LazyStatic<HashMap<HljsTheme, &'static str>> = LazyStatic::new(|| {
+static HLJS_THEMES: LazyLock<HashMap<HljsTheme, &'static str>> = LazyLock::new(|| {
     use HljsTheme::*;
     kv![
         A11yDark                => "a11y-dark",

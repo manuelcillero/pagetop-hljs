@@ -1,6 +1,6 @@
 [package]
 name = "pagetop-hljs"
-version = "0.0.13"
+version = "0.0.14"
 edition = "2021"
 
 description = "PageTop package to display beautiful code snippets on web pages."
@@ -20,7 +20,7 @@ keywords = [
 
 [dependencies]
 pagetop = { version = "0.0", path = "../pagetop" }
-static-files = "0.2.3"
+static-files = "0.2.4"
 serde = { version = "1.0", features = ["derive"] }
 
 [build-dependencies]
